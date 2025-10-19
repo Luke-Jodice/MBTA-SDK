@@ -34,7 +34,7 @@ const port = 3000;
 // console.log(`🚀 Server running at http://localhost:${port}`);
 
 // Serve static files from the public directory
-app.use('/public/*', serveStatic({ root: './' }));
+app.use('/*', serveStatic({ root: './public' }));
 
 app.get('/', (c) => {
   const welcomeMessage = asciiArt + '\n\nDeveloped by Luke Jodice (luke-jodice) on Github\n\nPlease read our documentation on the different available calls that we have available to the public';
