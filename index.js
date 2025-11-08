@@ -299,7 +299,4 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // For Vercel deployment
-export default {
-  port,
-  fetch: app.fetch,
-};
+export default app;
