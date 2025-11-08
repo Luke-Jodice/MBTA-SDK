@@ -37,7 +37,7 @@ const port = 3000;
 app.use('/*', serveStatic({ root: './public' }));
 
 app.get('/', (c) => {
-  const welcomeMessage = asciiArt + '\n\nDeveloped by Luke Jodice (luke-jodice) on Github\n\nPlease read our documentation on the different available calls that we have available to the public';
+  const welcomeMessage = asciiArt + '\n\nDeveloped by Luke Jodice (luke-jodice) on Github\n\nPlease read our documentation on the different available calls that we have available to the public\n\nPlease see the following endpoints for a little bit more information\n\n/public/docs - Documentation \n\n/public/ - Live demo of a Usecase for this';
   return c.text(welcomeMessage,200);
 });
 
