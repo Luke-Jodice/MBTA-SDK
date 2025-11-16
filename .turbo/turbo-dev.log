@@ -1,0 +1,37 @@
+
+> mbtamiddle@1.0.0 dev /Users/ljodice/Code/GoodMorningPlatform/packages/mbta-sdk
+> node --watch index.js
+
+[
+  {
+    name: [32m'Park Street'[39m,
+    latitude: [33m42.356395[39m,
+    longitude: [33m-71.062424[39m,
+    municipality: [32m'Boston'[39m,
+    wheelchair_boarding: [33m1[39m,
+    platform_name: [32m'Boston College'[39m,
+    train_line: [32m'Green/Red Line'[39m,
+    transfer_stations: [ [32m'Park Street'[39m ],
+    previous_stop: [ [32m'Government Center'[39m, [32m'Charles/MGH'[39m ],
+    next_stop: [ [32m'Boylston'[39m, [32m'Downtown Crossing'[39m ],
+    description: [32m'Park Street - Green/Red Line - Unknown'[39m,
+    isHub: [33mtrue[39m,
+    line_short: [32m'place-pktrm'[39m
+  },
+  {
+    name: [32m'North Station'[39m,
+    latitude: [33m42.36528[39m,
+    longitude: [33m-71.060205[39m,
+    municipality: [32m'Boston'[39m,
+    wheelchair_boarding: [33m1[39m,
+    platform_name: [32m'Lechmere & North'[39m,
+    train_line: [32m'Green/Orange Line'[39m,
+    transfer_stations: [ [32m'North Station'[39m ],
+    previous_stop: [ [32m'Haymarket'[39m ],
+    next_stop: [ [32m'Community College'[39m, [32m'Science Park/West End'[39m ],
+    isHub: [33mtrue[39m,
+    description: [32m'North Station - Green/Orange Line - Unknown'[39m,
+    line_short: [32m'place-north'[39m
+  }
+]
+🚀 Server running at http://localhost:3000
