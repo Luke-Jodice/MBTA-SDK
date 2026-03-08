@@ -108,6 +108,20 @@
             transform: none;
         }
 
+        .btn-secondary {
+            background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+        }
+
+        .refresh-controls {
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .refresh-controls label {
+            font-weight: 600;
+            color: #333;
+        }
+
         .loading {
             text-align: center;
             padding: 40px;
@@ -267,6 +281,15 @@
                 <button class="btn" id="getTrainsBtn" onclick="getTrainTimes()">
                     Get Train Times
                 </button>
+                <button class="btn btn-secondary" id="resetBtn" onclick="resetTrainTimings()" title="Clear and refetch train times">
+                    Reset Timings
+                </button>
+            </div>
+            <div class="controls refresh-controls">
+                <label for="refreshInterval">Auto-refresh every</label>
+                <input type="number" id="refreshInterval" min="10" max="300" value="30" style="width: 70px; padding: 10px; border-radius: 8px; border: 2px solid #e1e5e9;"> seconds
+                <button class="btn btn-secondary" id="startRefreshBtn" onclick="startAutoRefresh()">Start auto-refresh</button>
+                <button class="btn btn-secondary" id="stopRefreshBtn" onclick="stopAutoRefresh()" style="display: none;">Stop auto-refresh</button>
             </div>
             
             <div id="loading" class="loading" style="display: none;">
@@ -342,6 +365,8 @@
             });
         };
 
+        let autoRefreshTimer = null;
+
         async function getTrainTimes() {
             const stopSelect = document.getElementById('stopSelect');
             const selectedStop = stopSelect.value;
@@ -356,7 +381,6 @@
             hideResults();
 
             try {
-                // Get both inbound and outbound trains
                 const response = await fetch(`/times/both/${selectedStop}/3`);
                 
                 if (!response.ok) {
@@ -377,6 +401,72 @@
             } finally {
                 showLoading(false);
             }
+        }
+
+        // Reset train timings: clears display and refetches from /times/reset. Call this directly or use auto-refresh.
+        async function resetTrainTimings() {
+            const stopSelect = document.getElementById('stopSelect');
+            const selectedStop = stopSelect.value;
+            
+            if (!selectedStop) {
+                showError('Please select a station first.');
+                return;
+            }
+
+            showLoading(true);
+            hideError();
+            hideResults();
+
+            try {
+                const response = await fetch(`/times/reset?stopId=${encodeURIComponent(selectedStop)}&nextnum=3`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.status === "200" && data.inbound !== undefined) {
+                    displayResults(data.inbound, data.outbound);
+                } else if (data.status === "200") {
+                    // No stopId was sent; timings "reset" but no data returned
+                    hideResults();
+                } else {
+                    throw new Error(data.error || 'Failed to reset train times');
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showError(`Failed to reset train times: ${error.message}`);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function startAutoRefresh() {
+            const stopSelect = document.getElementById('stopSelect');
+            const selectedStop = stopSelect.value;
+            if (!selectedStop) {
+                showError('Please select a station first.');
+                return;
+            }
+            const seconds = parseInt(document.getElementById('refreshInterval').value, 10) || 30;
+            const ms = Math.max(10000, Math.min(300000, seconds * 1000)); // clamp 10s–300s
+            if (autoRefreshTimer) clearInterval(autoRefreshTimer);
+            autoRefreshTimer = setInterval(resetTrainTimings, ms);
+            document.getElementById('startRefreshBtn').style.display = 'none';
+            document.getElementById('stopRefreshBtn').style.display = 'inline-block';
+            hideError();
+            resetTrainTimings(); // run once immediately
+        }
+
+        function stopAutoRefresh() {
+            if (autoRefreshTimer) {
+                clearInterval(autoRefreshTimer);
+                autoRefreshTimer = null;
+            }
+            document.getElementById('startRefreshBtn').style.display = 'inline-block';
+            document.getElementById('stopRefreshBtn').style.display = 'none';
         }
 
         function displayResults(inbound, outbound) {

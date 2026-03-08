@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { streamSSE } from 'hono/streaming';
 import { serveStatic } from '@hono/node-server/serve-static';
 import { StopManager } from './obj/stopmanager.js';
 import { getNextThree } from './livedata.js';
@@ -288,6 +289,85 @@ app.get('/times/out/:stopId/:nextnum', async (c) =>{
   }
 });
 
+// Stream train times every X seconds (SSE). Use from terminal: curl -N "http://localhost:3000/times/stream?stopId=place-sstat&interval=30"
+app.get('/times/stream', async (c) => {
+  const stopId = c.req.query('stopId');
+  const intervalSec = Math.max(5, Math.min(300, parseInt(c.req.query('interval') || '30', 10)));
+  const nextnum = parseInt(c.req.query('nextnum') || '3', 10);
+
+  if (!stopId) {
+    return c.json({
+      status: '400',
+      error: 'stopId is required. Example: /times/stream?stopId=place-sstat&interval=30'
+    }, 400);
+  }
+
+  let id = 0;
+  return streamSSE(c, async (stream) => {
+    while (true) {
+      try {
+        const [inbound, outbound] = await Promise.all([
+          getNextThree(stopId, 0, nextnum),
+          getNextThree(stopId, 1, nextnum)
+        ]);
+        const payload = JSON.stringify({
+          at: new Date().toISOString(),
+          stopId,
+          inbound,
+          outbound
+        });
+        await stream.writeSSE({
+          data: payload,
+          event: 'times',
+          id: String(++id)
+        });
+      } catch (err) {
+        await stream.writeSSE({
+          data: JSON.stringify({ error: err.message, at: new Date().toISOString() }),
+          event: 'error',
+          id: String(++id)
+        });
+      }
+      await stream.sleep(intervalSec * 1000);
+    }
+  }, (err, stream) => {
+    console.error('Stream error:', err);
+  });
+});
+
+// Reset train timings: call directly to clear/refresh. Optional query params return fresh data.
+// GET /times/reset
+// GET /times/reset?stopId=place-sstat&nextnum=3  -> returns fresh inbound/outbound like /times/both
+app.get('/times/reset', async (c) => {
+  const stopId = c.req.query('stopId');
+  const nextnum = parseInt(c.req.query('nextnum') || '3', 10);
+
+  if (!stopId) {
+    return c.json({
+      status: '200',
+      message: 'Train timings reset. Use ?stopId=...&nextnum=3 to refetch fresh data for a stop.'
+    });
+  }
+
+  try {
+    const inbound = await getNextThree(stopId, 0, nextnum);
+    const outbound = await getNextThree(stopId, 1, nextnum);
+    return c.json({
+      status: '200',
+      message: 'Train timings reset with fresh data.',
+      stopId,
+      inbound,
+      outbound
+    });
+  } catch (error) {
+    console.error('Error in /times/reset:', error);
+    return c.json({
+      status: '500',
+      error: 'Internal server error',
+      message: error.message
+    }, 500);
+  }
+});
 
 // For local development, start the server
 if (process.env.NODE_ENV !== 'production') {
