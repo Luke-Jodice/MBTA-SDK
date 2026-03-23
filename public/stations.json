@@ -4,84 +4,84 @@
     "line_short": "place-spmnl",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70207"
   },
   {
     "name": "Boylston",
     "line_short": "place-boyls",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70158"
   },
   {
     "name": "Dean Road",
     "line_short": "place-denrd",
     "train_line": "Green Line",
     "municipality": "Brookline",
-    "id": null
+    "id": "70233"
   },
   {
     "name": "Copley",
     "line_short": "place-coecl",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70154"
   },
   {
     "name": "Boston University Central",
     "line_short": "place-bucen",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70144"
   },
   {
     "name": "Milton",
     "line_short": "place-miltt",
     "train_line": "Mattapan Trolley",
     "municipality": "Milton",
-    "id": null
+    "id": "70267"
   },
   {
     "name": "Saint Paul Street",
     "line_short": "place-stpul",
     "train_line": "Green Line",
     "municipality": "Brookline",
-    "id": null
+    "id": "70217"
   },
   {
     "name": "Symphony",
     "line_short": "place-symcl",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70241"
   },
   {
     "name": "Griggs Street",
     "line_short": "place-grigg",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70128"
   },
   {
     "name": "Chestnut Hill Avenue",
     "line_short": "place-chill",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70112"
   },
   {
     "name": "Beaconsfield",
     "line_short": "place-bcnfd",
     "train_line": "Green Line",
     "municipality": "Brookline",
-    "id": null
+    "id": "70176"
   },
   {
     "name": "Kenmore",
     "line_short": "place-kencl",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "899"
   },
   {
     "name": "Government Center",
@@ -95,35 +95,35 @@
     "line_short": "place-engav",
     "train_line": "Green Line",
     "municipality": "Brookline",
-    "id": null
+    "id": "70235"
   },
   {
     "name": "Riverside",
     "line_short": "place-river",
     "train_line": "Green Line - Park Street & North",
     "municipality": "Newton",
-    "id": null
+    "id": "38155"
   },
   {
     "name": "Mattapan",
     "line_short": "place-matt",
     "train_line": "Mattapan Trolley",
     "municipality": "Boston",
-    "id": null
+    "id": "185"
   },
   {
     "name": "Woodland",
     "line_short": "place-woodl",
     "train_line": "Green Line",
     "municipality": "Newton",
-    "id": null
+    "id": "70162"
   },
   {
     "name": "Northeastern University",
     "line_short": "place-nuniv",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70243"
   },
   {
     "name": "Park Street",
@@ -137,63 +137,63 @@
     "line_short": "place-valrd",
     "train_line": "Mattapan Trolley",
     "municipality": "Milton",
-    "id": null
+    "id": "70271"
   },
   {
     "name": "Medford/Tufts",
     "line_short": "place-mdftf",
     "train_line": "Green Line",
     "municipality": "Medford",
-    "id": null
+    "id": "70511"
   },
   {
     "name": "Waban",
     "line_short": "place-waban",
     "train_line": "Green Line",
     "municipality": "Newton",
-    "id": null
+    "id": "70164"
   },
   {
     "name": "Amory Street",
     "line_short": "place-amory",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "170140"
   },
   {
     "name": "Reservoir",
     "line_short": "place-rsmnl",
     "train_line": "Green Line",
     "municipality": "Brookline",
-    "id": null
+    "id": "21917"
   },
   {
     "name": "Blandford Street",
     "line_short": "place-bland",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70148"
   },
   {
     "name": "South Street",
     "line_short": "place-sougr",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70110"
   },
   {
     "name": "Hynes Convention Center",
     "line_short": "place-hymnl",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70152"
   },
   {
     "name": "Central Avenue",
     "line_short": "place-cenav",
     "train_line": "Mattapan Trolley",
     "municipality": "Milton",
-    "id": null
+    "id": "70269"
   },
   {
     "name": "Ashmont",
@@ -207,21 +207,21 @@
     "line_short": "place-bckhl",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70257"
   },
   {
     "name": "Boston College",
     "line_short": "place-lake",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70106"
   },
   {
     "name": "Babcock Street",
     "line_short": "place-babck",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "170136"
   },
   {
     "name": "North Station",
@@ -235,119 +235,119 @@
     "line_short": "place-brkhl",
     "train_line": "Green Line",
     "municipality": "Brookline",
-    "id": null
+    "id": "70178"
   },
   {
     "name": "Ball Square",
     "line_short": "place-balsq",
     "train_line": "Green Line",
     "municipality": "Medford",
-    "id": null
+    "id": "70509"
   },
   {
     "name": "East Somerville",
     "line_short": "place-esomr",
     "train_line": "Green Line",
     "municipality": "Somerville",
-    "id": null
+    "id": "70513"
   },
   {
     "name": "Museum of Fine Arts",
     "line_short": "place-mfa",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70245"
   },
   {
     "name": "Eliot",
     "line_short": "place-eliot",
     "train_line": "Green Line",
     "municipality": "Newton",
-    "id": null
+    "id": "70166"
   },
   {
     "name": "Boston University East",
     "line_short": "place-buest",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70146"
   },
   {
     "name": "Heath Street",
     "line_short": "place-hsmnl",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70260"
   },
   {
     "name": "Chestnut Hill",
     "line_short": "place-chhil",
     "train_line": "Green Line",
     "municipality": "Newton",
-    "id": null
+    "id": "70172"
   },
   {
     "name": "Prudential",
     "line_short": "place-prmnl",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70239"
   },
   {
     "name": "Butler",
     "line_short": "place-butlr",
     "train_line": "Mattapan Trolley",
     "municipality": "Boston",
-    "id": null
+    "id": "70265"
   },
   {
     "name": "Coolidge Corner",
     "line_short": "place-cool",
     "train_line": "Green Line",
     "municipality": "Brookline",
-    "id": null
+    "id": "70219"
   },
   {
     "name": "Hawes Street",
     "line_short": "place-hwsst",
     "train_line": "Green Line",
     "municipality": "Brookline",
-    "id": null
+    "id": "70213"
   },
   {
     "name": "Brandon Hall",
     "line_short": "place-bndhl",
     "train_line": "Green Line",
     "municipality": "Brookline",
-    "id": null
+    "id": "70225"
   },
   {
     "name": "Gilman Square",
     "line_short": "place-gilmn",
     "train_line": "Green Line",
     "municipality": "Somerville",
-    "id": null
+    "id": "70505"
   },
   {
     "name": "Cedar Grove",
     "line_short": "place-cedgr",
     "train_line": "Mattapan Trolley",
     "municipality": "Boston",
-    "id": null
+    "id": "70263"
   },
   {
     "name": "Mission Park",
     "line_short": "place-mispk",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70253"
   },
   {
     "name": "Arlington",
     "line_short": "place-armnl",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70156"
   },
   {
     "name": "Haymarket",
@@ -361,105 +361,105 @@
     "line_short": "place-fenwy",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70186"
   },
   {
     "name": "Warren Street",
     "line_short": "place-wrnst",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70124"
   },
   {
     "name": "Allston Street",
     "line_short": "place-alsgr",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70126"
   },
   {
     "name": "Newton Highlands",
     "line_short": "place-newtn",
     "train_line": "Green Line",
     "municipality": "Newton",
-    "id": null
+    "id": "8155"
   },
   {
     "name": "Brigham Circle",
     "line_short": "place-brmnl",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70249"
   },
   {
     "name": "Longwood",
     "line_short": "place-longw",
     "train_line": "Green Line",
     "municipality": "Brookline",
-    "id": null
+    "id": "70182"
   },
   {
     "name": "Harvard Avenue",
     "line_short": "place-harvd",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70130"
   },
   {
     "name": "Cleveland Circle",
     "line_short": "place-clmnl",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70237"
   },
   {
     "name": "Brookline Village",
     "line_short": "place-bvmnl",
     "train_line": "Green Line",
     "municipality": "Brookline",
-    "id": null
+    "id": "70180"
   },
   {
     "name": "Kent Street",
     "line_short": "place-kntst",
     "train_line": "Green Line",
     "municipality": "Brookline",
-    "id": null
+    "id": "70215"
   },
   {
     "name": "Magoun Square",
     "line_short": "place-mgngl",
     "train_line": "Green Line",
     "municipality": "Somerville",
-    "id": null
+    "id": "70507"
   },
   {
     "name": "Saint Mary's Street",
     "line_short": "place-smary",
     "train_line": "Green Line",
     "municipality": "Brookline",
-    "id": null
+    "id": "70211"
   },
   {
     "name": "Chiswick Road",
     "line_short": "place-chswk",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70114"
   },
   {
     "name": "Sutherland Road",
     "line_short": "place-sthld",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70116"
   },
   {
     "name": "Union Square",
     "line_short": "place-unsqu",
     "train_line": "Green Line - Copley & West",
     "municipality": "Somerville",
-    "id": null
+    "id": "70503"
   },
   {
     "name": "Airport",
@@ -487,7 +487,7 @@
     "line_short": "place-bomnl",
     "train_line": "Blue Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70038"
   },
   {
     "name": "Maverick",
@@ -529,7 +529,7 @@
     "line_short": "place-wondl",
     "train_line": "Blue Line",
     "municipality": "Revere",
-    "id": null
+    "id": "15796"
   },
   {
     "name": "Wood Island",
@@ -543,91 +543,91 @@
     "line_short": "place-buwst",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70213"
   },
   {
     "name": "Fairbanks Street",
     "line_short": "place-fbkst",
     "train_line": "Green Line",
     "municipality": "Brookline",
-    "id": null
+    "id": "70227"
   },
   {
     "name": "Fenwood Road",
     "line_short": "place-fenwd",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70251"
   },
   {
     "name": "Lechmere",
     "line_short": "place-lech",
     "train_line": "Green Line",
     "municipality": "Cambridge",
-    "id": null
+    "id": "70500"
   },
   {
     "name": "Longwood Medical Area",
     "line_short": "place-lngmd",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70247"
   },
   {
     "name": "Newton Centre",
     "line_short": "place-newto",
     "train_line": "Green Line",
     "municipality": "Newton",
-    "id": null
+    "id": "70170"
   },
   {
     "name": "Packard's Corner",
     "line_short": "place-brico",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70134"
   },
   {
     "name": "Riverway",
     "line_short": "place-rvrwy",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70255"
   },
   {
     "name": "Summit Avenue",
     "line_short": "place-sumav",
     "train_line": "Green Line",
     "municipality": "Brookline",
-    "id": null
+    "id": "70223"
   },
   {
     "name": "Tappan Street",
     "line_short": "place-tapst",
     "train_line": "Green Line",
     "municipality": "Brookline",
-    "id": null
+    "id": "70231"
   },
   {
     "name": "Washington Square",
     "line_short": "place-bcnwa",
     "train_line": "Green Line",
     "municipality": "Brookline",
-    "id": null
+    "id": "70229"
   },
   {
     "name": "Washington Street",
     "line_short": "place-wascm",
     "train_line": "Green Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70120"
   },
   {
     "name": "Capen Street",
     "line_short": "place-capst",
     "train_line": "Mattapan Trolley",
     "municipality": "Milton",
-    "id": null
+    "id": "70273"
   },
   {
     "name": "Assembly",
@@ -669,14 +669,14 @@
     "line_short": "place-forhl",
     "train_line": "Orange Line",
     "municipality": "Boston",
-    "id": null
+    "id": "875"
   },
   {
     "name": "Green Street",
     "line_short": "place-grnst",
     "train_line": "Orange Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70002"
   },
   {
     "name": "Jackson Square",
@@ -704,7 +704,7 @@
     "line_short": "place-ogmnl",
     "train_line": "Orange Line",
     "municipality": "Malden",
-    "id": null
+    "id": "9328"
   },
   {
     "name": "Roxbury Crossing",
@@ -753,7 +753,7 @@
     "line_short": "place-alfcl",
     "train_line": "Red Line",
     "municipality": "Cambridge",
-    "id": null
+    "id": "14112"
   },
   {
     "name": "Andrew",
@@ -767,7 +767,7 @@
     "line_short": "place-brntn",
     "train_line": "Red Line",
     "municipality": "Braintree",
-    "id": null
+    "id": "38671"
   },
   {
     "name": "Broadway",
@@ -795,7 +795,7 @@
     "line_short": "place-davis",
     "train_line": "Red Line",
     "municipality": "Somerville",
-    "id": null
+    "id": "5104"
   },
   {
     "name": "Fields Corner",
@@ -816,7 +816,7 @@
     "line_short": "place-jfk",
     "train_line": "Red Line",
     "municipality": "Boston",
-    "id": null
+    "id": "121"
   },
   {
     "name": "Kendall/MIT",
@@ -844,7 +844,7 @@
     "line_short": "place-qamnl",
     "train_line": "Red Line",
     "municipality": "Quincy",
-    "id": null
+    "id": "41031"
   },
   {
     "name": "Quincy Center",
@@ -872,7 +872,7 @@
     "line_short": "place-sstat",
     "train_line": "Red Line",
     "municipality": "Boston",
-    "id": null
+    "id": "70079"
   },
   {
     "name": "Wollaston",

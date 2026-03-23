@@ -1,4 +1,9 @@
 import fs from 'fs';
+import { execSync } from 'child_process';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const mainData = JSON.parse(fs.readFileSync('obj/maindata.json', 'utf8'));
 const orgStopsData = JSON.parse(fs.readFileSync('obj/orgstops-e.json', 'utf8'));
@@ -42,3 +47,14 @@ const result = Array.from(stationsMap.values()).map(station => {
 
 fs.writeFileSync('public/stations.json', JSON.stringify(result, null, 2));
 console.log(`Successfully created public/stations.json with ${result.length} stations.`);
+
+try {
+  execSync(`python3 "${join(__dirname, 'scripts', 'fill_station_ids.py')}"`, {
+    stdio: 'inherit',
+  });
+} catch (err) {
+  console.warn(
+    'fill_station_ids.py failed (Green Line / GTFS IDs may stay null):',
+    err?.message ?? err,
+  );
+}

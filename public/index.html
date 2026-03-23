@@ -301,6 +301,135 @@
             opacity: 0.7;
         }
 
+        .footer-actions {
+            margin-top: 1.25rem;
+        }
+
+        .btn-footer {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 0.5rem 1.25rem;
+            margin-bottom: 1rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .btn-footer:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-backdrop.is-open {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--white);
+            color: var(--text);
+            border-radius: var(--radius);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+            width: 100%;
+            max-width: 420px;
+            max-height: 90vh;
+            overflow: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .modal-header h2 {
+            font-size: 1.15rem;
+            color: var(--primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            line-height: 1;
+            cursor: pointer;
+            color: var(--secondary);
+            padding: 0 0.25rem;
+        }
+
+        .modal-close:hover {
+            color: var(--text);
+        }
+
+        .modal-form {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .modal-form label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: block;
+            margin-bottom: 0.35rem;
+        }
+
+        .modal-form input[type="text"],
+        .modal-form textarea,
+        .modal-form select {
+            width: 100%;
+            padding: 0.65rem 0.75rem;
+            border: 2px solid #e1e5e9;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .modal-form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .modal-form .btn-submit {
+            margin-top: 0.25rem;
+            align-self: flex-start;
+            background: var(--primary);
+            color: var(--white);
+            padding: 0.65rem 1.5rem;
+        }
+
+        .modal-form .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .modal-status {
+            font-size: 0.9rem;
+            min-height: 1.25rem;
+        }
+
+        .modal-status.ok {
+            color: #198754;
+        }
+
+        .modal-status.err {
+            color: var(--accent);
+        }
+
         @media (max-width: 768px) {
             header h1 { font-size: 2.5rem; }
             .results { grid-template-columns: 1fr; }
@@ -430,8 +559,41 @@
             <a href="/data">Data Points</a>
             <a href="#">GitHub</a>
         </div>
+        <div class="footer-actions">
+            <button type="button" class="btn-footer" id="openFeedbackBtn" aria-haspopup="dialog" aria-controls="feedbackModal">See a Bug?</button>
+        </div>
         <p>&copy; 2026 MBTA-SDK Project. Not affiliated with the MBTA.</p>
+       
     </footer>
+
+    <div class="modal-backdrop" id="feedbackModalBackdrop" aria-hidden="true">
+        <div class="modal" id="feedbackModal" role="dialog" aria-modal="true" aria-labelledby="feedbackModalTitle" tabindex="-1">
+            <div class="modal-header">
+                <h2 id="feedbackModalTitle">Feedback</h2>
+                <button type="button" class="modal-close" id="closeFeedbackBtn" aria-label="Close">&times;</button>
+            </div>
+            <form class="modal-form" id="feedbackForm">
+                <div>
+                    <label for="feedbackTitle">Title</label>
+                    <input type="text" id="feedbackTitle" name="title" required autocomplete="off" placeholder="Short summary">
+                </div>
+                <div>
+                    <label for="feedbackDescription">Description</label>
+                    <textarea id="feedbackDescription" name="description" required placeholder="Details…"></textarea>
+                </div>
+                <div>
+                    <label for="feedbackOption">Option</label>
+                    <select id="feedbackOption" name="option" required>
+                        <option value="" disabled selected>Choose…</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                    </select>
+                </div>
+                <p class="modal-status" id="feedbackStatus" role="status"></p>
+                <button type="submit" class="btn btn-submit" id="feedbackSubmitBtn">Submit</button>
+            </form>
+        </div>
+    </div>
 
     <script>
         // Existing logic maintained from original index.html
@@ -568,6 +730,74 @@
             error.style.display = 'block';
         }
         function hideError() { document.getElementById('error').style.display = 'none'; }
+
+        /** Placeholder API — replace with your backend route when ready */
+        const FEEDBACK_ENDPOINT = 'https://jsonplaceholder.typicode.com/posts';
+
+        (function initFeedbackModal() {
+            const backdrop = document.getElementById('feedbackModalBackdrop');
+            const modal = document.getElementById('feedbackModal');
+            const openBtn = document.getElementById('openFeedbackBtn');
+            const closeBtn = document.getElementById('closeFeedbackBtn');
+            const form = document.getElementById('feedbackForm');
+            const statusEl = document.getElementById('feedbackStatus');
+            const submitBtn = document.getElementById('feedbackSubmitBtn');
+            let lastFocus = null;
+
+            function openModal() {
+                lastFocus = document.activeElement;
+                backdrop.classList.add('is-open');
+                backdrop.setAttribute('aria-hidden', 'false');
+                modal.focus();
+            }
+
+            function closeModal() {
+                backdrop.classList.remove('is-open');
+                backdrop.setAttribute('aria-hidden', 'true');
+                statusEl.textContent = '';
+                statusEl.className = 'modal-status';
+                if (lastFocus && lastFocus.focus) lastFocus.focus();
+            }
+
+            openBtn.addEventListener('click', openModal);
+            closeBtn.addEventListener('click', closeModal);
+            backdrop.addEventListener('click', (e) => {
+                if (e.target === backdrop) closeModal();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && backdrop.classList.contains('is-open')) closeModal();
+            });
+
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                statusEl.textContent = '';
+                statusEl.className = 'modal-status';
+                const payload = {
+                    title: document.getElementById('feedbackTitle').value.trim(),
+                    description: document.getElementById('feedbackDescription').value.trim(),
+                    option: document.getElementById('feedbackOption').value,
+                };
+                submitBtn.disabled = true;
+                try {
+                    const res = await fetch(FEEDBACK_ENDPOINT, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload),
+                    });
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    await res.json();
+                    statusEl.textContent = 'Sent — replace FEEDBACK_ENDPOINT with your API when ready.';
+                    statusEl.className = 'modal-status ok';
+                    form.reset();
+                    setTimeout(closeModal, 1500);
+                } catch (err) {
+                    statusEl.textContent = 'Could not send: ' + (err.message || 'unknown error');
+                    statusEl.className = 'modal-status err';
+                } finally {
+                    submitBtn.disabled = false;
+                }
+            });
+        })();
     </script>
 </body>
 </html>
