@@ -259,6 +259,16 @@
               <option value="Product-Defect">Product Defect</option>
             </select>
           </div>
+          <div>
+            <label for="feedbackEmail">Email</label>
+            <input
+              type="text"
+              id="feedbackEmail"
+              name="Email"
+              required
+              autocomplete="off"
+              placeholder="email address"
+            />
           <p class="modal-status" id="feedbackStatus" role="status"></p>
           <button type="submit" class="btn btn-submit" id="feedbackSubmitBtn">
             Submit
@@ -483,11 +493,12 @@
           const title = document.getElementById("feedbackTitle").value.trim();
           const type = document.getElementById("feedbackOption").value;
           const description = document.getElementById("feedbackDescription").value.trim();
+          const email = document.getElementById("feedbackEmail").value.trim();
           
           const payload = {
             title: title,
-            body: `**Type:** ${type}\n\n**Description:**\n${description}`,
-            labels: ["Bug/Feat"]
+            body: `**Type:** ${type}\n\n**From**\n${email}**Description:**\n${description}`,
+            labels: type
           };
 
           submitBtn.disabled = true;
