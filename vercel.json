@@ -13,11 +13,15 @@
   "routes": [
     {
       "src": "/docs",
-      "dest": "/public/docs.html"
+      "dest": "/docs.html"
     },
     {
       "src": "/data",
-      "dest": "/public/data.html"
+      "dest": "/data.html"
+    },
+    {
+      "src": "^/$",
+      "dest": "/index.html"
     },
     {
       "handle": "filesystem"
