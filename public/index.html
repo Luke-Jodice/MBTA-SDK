@@ -1,372 +1,529 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MBTA-SDK | Real-time MBTA Train Tracking API</title>
-    <link rel="stylesheet" href="/styles.css">
-</head>
-<body>
-
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
     <nav>
-        <!-- <div class="logo">🚇 MBTA-SDK</div> -->
-        <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#features">Features</a></li>
-            <li><a href="#demo">Live Demo</a></li>
-            <li><a href="/docs">API Docs</a></li>
-            <li><a href="/data">Data Points</a></li>
-        </ul>
+      <!-- <div class="logo">🚇 MBTA-SDK</div> -->
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#demo">Live Demo</a></li>
+        <li><a href="/docs">API Docs</a></li>
+        <li><a href="/data">Data Points</a></li>
+      </ul>
     </nav>
 
     <header id="home">
-        <div class="hero-content">
-            <h1>Real-time MBTA Data at Your Fingertips</h1>
-            <p>A powerful, easy-to-use API wrapper for the Massachusetts Bay Transportation Authority. Get train schedules, station data, and live updates in seconds.</p>
-            <div class="cta-buttons">
-                <a href="#demo" class="btn btn-primary">Try the Demo</a>
-                <a href="/docs" class="btn btn-outline">Read the Docs</a>
-            </div>
+      <div class="hero-content">
+        <h1>Real-time MBTA Data at Your Fingertips</h1>
+        <p>
+          A powerful, easy-to-use API wrapper for the Massachusetts Bay
+          Transportation Authority. Get train schedules, station data, and live
+          updates in seconds.
+        </p>
+        <div class="cta-buttons">
+          <a href="#demo" class="btn btn-primary">Try the Demo</a>
+          <a href="/docs" class="btn btn-outline">Read the Docs</a>
         </div>
+      </div>
     </header>
 
     <section class="features" id="features">
-        <div class="section-title">
-            <h2>Why Use MBTA-SDK?</h2>
+      <div class="section-title">
+        <h2>Why Use MBTA-SDK?</h2>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <span class="feature-icon"></span>
+          <h3>Real-time Tracking</h3>
+          <p>
+            Accurate, up-to-the-minute train schedules and arrival predictions
+            for all lines.
+          </p>
         </div>
-        <div class="features-grid">
-            <div class="feature-card">
-                <span class="feature-icon"></span>
-                <h3>Real-time Tracking</h3>
-                <p>Accurate, up-to-the-minute train schedules and arrival predictions for all lines.</p>
-            </div>
-            <div class="feature-card">
-                <span class="feature-icon"></span>
-                <h3>Station Search</h3>
-                <p>Find stops by name, ID, or use geographical coordinates to find the nearest station.</p>
-            </div>
-            <div class="feature-card">
-                <span class="feature-icon"></span>
-                <h3>Full Coverage</h3>
-                <p>Comprehensive data for Blue, Orange, Red, and Green lines, including all stops and routes.</p>
-            </div>
-            <div class="feature-card">
-                <span class="feature-icon"></span>
-                <h3>Developer First</h3>
-                <p>Clean RESTful endpoints designed for seamless integration into your next big project.</p>
-            </div>
+        <div class="feature-card">
+          <span class="feature-icon"></span>
+          <h3>Station Search</h3>
+          <p>
+            Find stops by name, ID, or use geographical coordinates to find the
+            nearest station.
+          </p>
         </div>
+        <div class="feature-card">
+          <span class="feature-icon"></span>
+          <h3>Full Coverage</h3>
+          <p>
+            Comprehensive data for Blue, Orange, Red, and Green lines, including
+            all stops and routes.
+          </p>
+        </div>
+        <div class="feature-card">
+          <span class="feature-icon"></span>
+          <h3>Developer First</h3>
+          <p>
+            Clean RESTful endpoints designed for seamless integration into your
+            next big project.
+          </p>
+        </div>
+      </div>
     </section>
 
     <section class="demo-section" id="demo">
-        <div class="section-title">
-            <h2>Live Demo</h2>
-            <p>See the SDK in action with our real-time train tracker.</p>
+      <div class="section-title">
+        <h2>Live Demo</h2>
+        <p>See the SDK in action with our real-time train tracker.</p>
+      </div>
+      <div class="demo-container">
+        <div class="demo-header">
+          <h3>Train Tracker</h3>
         </div>
-        <div class="demo-container">
-            <div class="demo-header">
-                <h3>Train Tracker</h3>
+        <div class="demo-content">
+          <div class="controls">
+            <div class="select-wrapper">
+              <label
+                for="stopSelect"
+                style="display: block; margin-bottom: 5px; font-weight: 600"
+                >Station:</label
+              >
+              <select id="stopSelect">
+                <option value="">Choose a station...</option>
+              </select>
             </div>
-            <div class="demo-content">
-                <div class="controls">
-                    <div class="select-wrapper">
-                        <label for="stopSelect" style="display:block; margin-bottom: 5px; font-weight: 600;">Station:</label>
-                        <select id="stopSelect">
-                            <option value="">Choose a station...</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-demo" id="getTrainsBtn" onclick="getTrainTimes()">Get Times</button>
-                </div>
-                
-                <div class="controls">
-                    <div style="flex:1">
-                        <label for="refreshInterval" style="display:block; margin-bottom: 5px; font-weight: 600;">Auto-refresh (sec):</label>
-                        <input type="number" id="refreshInterval" min="10" max="300" value="30">
-                    </div>
-                    <button class="btn btn-secondary" id="startRefreshBtn" onclick="startAutoRefresh()">Start Auto</button>
-                    <button class="btn btn-secondary" id="stopRefreshBtn" onclick="stopAutoRefresh()" style="display: none;">Stop Auto</button>
-                    <button class="btn btn-secondary" onclick="resetTrainTimings()">Manual Reset</button>
-                </div>
+            <button
+              class="btn btn-demo"
+              id="getTrainsBtn"
+              onclick="getTrainTimes()"
+            >
+              Get Times
+            </button>
+          </div>
 
-                <div id="loading" style="display: none; text-align: center; padding: 20px;">
-                    <p>Loading...</p>
-                </div>
-                
-                <div id="results" class="results" style="display: none;">
-                    <div class="direction-card inbound">
-                        <h4>Inbound Trains</h4>
-                        <ul id="inboundList" class="train-list"></ul>
-                    </div>
-                    <div class="direction-card outbound">
-                        <h4>Outbound Trains</h4>
-                        <ul id="outboundList" class="train-list"></ul>
-                    </div>
-                </div>
-                
-                <div id="error" style="display: none; color: var(--accent); background: #fee; padding: 10px; border-radius: 5px; margin-top: 10px;"></div>
+          <div class="controls">
+            <div style="flex: 1">
+              <label
+                for="refreshInterval"
+                style="display: block; margin-bottom: 5px; font-weight: 600"
+                >Auto-refresh (sec):</label
+              >
+              <input
+                type="number"
+                id="refreshInterval"
+                min="10"
+                max="300"
+                value="30"
+              />
             </div>
+            <button
+              class="btn btn-secondary"
+              id="startRefreshBtn"
+              onclick="startAutoRefresh()"
+            >
+              Start Auto
+            </button>
+            <button
+              class="btn btn-secondary"
+              id="stopRefreshBtn"
+              onclick="stopAutoRefresh()"
+              style="display: none"
+            >
+              Stop Auto
+            </button>
+            <button class="btn btn-secondary" onclick="resetTrainTimings()">
+              Manual Reset
+            </button>
+          </div>
+
+          <div
+            id="loading"
+            style="display: none; text-align: center; padding: 20px"
+          >
+            <p>Loading...</p>
+          </div>
+
+          <div id="results" class="results" style="display: none">
+            <div class="direction-card inbound">
+              <h4>Inbound Trains</h4>
+              <ul id="inboundList" class="train-list"></ul>
+            </div>
+            <div class="direction-card outbound">
+              <h4>Outbound Trains</h4>
+              <ul id="outboundList" class="train-list"></ul>
+            </div>
+          </div>
+
+          <div
+            id="error"
+            style="
+              display: none;
+              color: var(--accent);
+              background: #fee;
+              padding: 10px;
+              border-radius: 5px;
+              margin-top: 10px;
+            "
+          ></div>
         </div>
+      </div>
     </section>
 
     <section class="quick-start">
-        <div class="section-title">
-            <h2>Quick Start</h2>
-            <p>Start fetching data in seconds.</p>
-        </div>
-        <div class="code-block">
-            curl https://mbta-companion-app-middleware.vercel.app/times/both/place-sstat/3
-        </div>
-        <p style="margin-top: 1.5rem; text-align: center;">
-            Check out the <a href="/docs" style="color: var(--primary); font-weight: 600;">Full Documentation</a> for more endpoints.
-        </p>
+      <div class="section-title">
+        <h2>Quick Start</h2>
+        <p>Start fetching data in seconds.</p>
+      </div>
+      <div class="code-block">
+        curl
+        https://mbta-companion-app-middleware.vercel.app/times/both/place-sstat/3
+      </div>
+      <p style="margin-top: 1.5rem; text-align: center">
+        Check out the
+        <a href="/docs" style="color: var(--primary); font-weight: 600"
+          >Full Documentation</a
+        >
+        for more endpoints.
+      </p>
     </section>
 
     <footer>
-        <div class="footer-links">
-            <a href="#home">Home</a>
-            <a href="/docs">API Docs</a>
-            <a href="/data">Data Points</a>
-            <a href="#">GitHub</a>
-        </div>
-        <div class="footer-actions">
-            <button type="button" class="btn-footer" id="openFeedbackBtn" aria-haspopup="dialog" aria-controls="feedbackModal">See a Bug?</button>
-        </div>
-        <p>&copy; 2026 MBTA-SDK Project. Not affiliated with the MBTA.</p>
-       
+      <div class="footer-links">
+        <a href="#home">Home</a>
+        <a href="/docs">API Docs</a>
+        <a href="/data">Data Points</a>
+        <a href="#">GitHub</a>
+      </div>
+      <div class="footer-actions">
+        <button
+          type="button"
+          class="btn-footer"
+          id="openFeedbackBtn"
+          aria-haspopup="dialog"
+          aria-controls="feedbackModal"
+        >
+          See a Bug?
+        </button>
+      </div>
+      <p>&copy; 2026 MBTA-SDK Project. Not affiliated with the MBTA.</p>
     </footer>
 
     <div class="modal-backdrop" id="feedbackModalBackdrop" aria-hidden="true">
-        <div class="modal" id="feedbackModal" role="dialog" aria-modal="true" aria-labelledby="feedbackModalTitle" tabindex="-1">
-            <div class="modal-header">
-                <h2 id="feedbackModalTitle">Feedback/Bug Report</h2>
-                <button type="button" class="modal-close" id="closeFeedbackBtn" aria-label="Close">&times;</button>
-            </div>
-            <form class="modal-form" id="feedbackForm">
-                <div>
-                    <label for="feedbackTitle">Title</label>
-                    <input type="text" id="feedbackTitle" name="title" required autocomplete="off" placeholder="Short summary">
-                </div>
-                <div>
-                    <label for="feedbackDescription">Description</label>
-                    <textarea id="feedbackDescription" name="description" required placeholder="Details…"></textarea>
-                </div>
-                <div>
-                    <label for="feedbackOption">Type</label>
-                    <select id="feedbackOption" name="option" required>
-                        <option value="" disabled selected>Choose…</option>
-                        <option value="Feedback">Feedback</option>
-                        <option value="Product-Defect">Product Defect</option>
-                    </select>
-                </div>
-                <p class="modal-status" id="feedbackStatus" role="status"></p>
-                <button type="submit" class="btn btn-submit" id="feedbackSubmitBtn">Submit</button>
-            </form>
+      <div
+        class="modal"
+        id="feedbackModal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="feedbackModalTitle"
+        tabindex="-1"
+      >
+        <div class="modal-header">
+          <h2 id="feedbackModalTitle">Feedback/Bug Report</h2>
+          <button
+            type="button"
+            class="modal-close"
+            id="closeFeedbackBtn"
+            aria-label="Close"
+          >
+            &times;
+          </button>
         </div>
+        <form class="modal-form" id="feedbackForm">
+          <div>
+            <label for="feedbackTitle">Title</label>
+            <input
+              type="text"
+              id="feedbackTitle"
+              name="title"
+              required
+              autocomplete="off"
+              placeholder="Short summary"
+            />
+          </div>
+          <div>
+            <label for="feedbackDescription">Description</label>
+            <textarea
+              id="feedbackDescription"
+              name="description"
+              required
+              placeholder="Details…"
+            ></textarea>
+          </div>
+          <div>
+            <label for="feedbackOption">Type</label>
+            <select id="feedbackOption" name="option" required>
+              <option value="" disabled selected>Choose…</option>
+              <option value="Feedback">Feedback</option>
+              <option value="Product-Defect">Product Defect</option>
+            </select>
+          </div>
+          <p class="modal-status" id="feedbackStatus" role="status"></p>
+          <button type="submit" class="btn btn-submit" id="feedbackSubmitBtn">
+            Submit
+          </button>
+        </form>
+      </div>
     </div>
 
     <script>
-        // Existing logic maintained from original index.html
-        const stops = [
-            { id: "place-sstat", name: "South Station" },
-            { id: "place-north", name: "North Station" },
-            { id: "place-pktrm", name: "Park Street" },
-            { id: "place-dwnxg", name: "Downtown Crossing" },
-            { id: "place-state", name: "State Street" },
-            { id: "place-govt", name: "Government Center" },
-            { id: "place-haecl", name: "Haymarket" },
-            { id: "place-chill", name: "Charles/MGH" },
-            { id: "place-knncl", name: "Kendall/MIT" },
-            { id: "place-cntsq", name: "Central Square" },
-            { id: "place-harvd", name: "Harvard Square" },
-            { id: "place-porter", name: "Porter Square" },
-            { id: "place-davis", name: "Davis Square" },
-            { id: "place-asmnl", name: "Assembly" },
-            { id: "place-sullivan", name: "Sullivan Square" },
-            { id: "place-community", name: "Community College" },
-            { id: "place-lech", name: "Lechmere" },
-            { id: "place-science", name: "Science Park" },
-            { id: "place-brntn", name: "Braintree" },
-            { id: "place-qnctr", name: "Quincy Center" },
-            { id: "place-wollaston", name: "Wollaston" },
-            { id: "place-nqncy", name: "North Quincy" },
-            { id: "place-jfk", name: "JFK/UMass" },
-            { id: "place-shmnl", name: "Savin Hill" },
-            { id: "place-fldcr", name: "Fields Corner" },
-            { id: "place-shawmut", name: "Shawmut" },
-            { id: "place-asmnl", name: "Ashmont" }
-        ];
+      // Existing logic maintained from original index.html
+      const stops = [
+        { id: "place-sstat", name: "South Station" },
+        { id: "place-north", name: "North Station" },
+        { id: "place-pktrm", name: "Park Street" },
+        { id: "place-dwnxg", name: "Downtown Crossing" },
+        { id: "place-state", name: "State Street" },
+        { id: "place-govt", name: "Government Center" },
+        { id: "place-haecl", name: "Haymarket" },
+        { id: "place-chill", name: "Charles/MGH" },
+        { id: "place-knncl", name: "Kendall/MIT" },
+        { id: "place-cntsq", name: "Central Square" },
+        { id: "place-harvd", name: "Harvard Square" },
+        { id: "place-porter", name: "Porter Square" },
+        { id: "place-davis", name: "Davis Square" },
+        { id: "place-asmnl", name: "Assembly" },
+        { id: "place-sullivan", name: "Sullivan Square" },
+        { id: "place-community", name: "Community College" },
+        { id: "place-lech", name: "Lechmere" },
+        { id: "place-science", name: "Science Park" },
+        { id: "place-brntn", name: "Braintree" },
+        { id: "place-qnctr", name: "Quincy Center" },
+        { id: "place-wollaston", name: "Wollaston" },
+        { id: "place-nqncy", name: "North Quincy" },
+        { id: "place-jfk", name: "JFK/UMass" },
+        { id: "place-shmnl", name: "Savin Hill" },
+        { id: "place-fldcr", name: "Fields Corner" },
+        { id: "place-shawmut", name: "Shawmut" },
+        { id: "place-asmnl", name: "Ashmont" },
+      ];
 
-        window.onload = function() {
-            const select = document.getElementById('stopSelect');
-            stops.forEach(stop => {
-                const option = document.createElement('option');
-                option.value = stop.id;
-                option.textContent = stop.name;
-                select.appendChild(option);
+      window.onload = function () {
+        const select = document.getElementById("stopSelect");
+        stops.forEach((stop) => {
+          const option = document.createElement("option");
+          option.value = stop.id;
+          option.textContent = stop.name;
+          select.appendChild(option);
+        });
+      };
+
+      let autoRefreshTimer = null;
+
+      async function getTrainTimes() {
+        const stopSelect = document.getElementById("stopSelect");
+        const selectedStop = stopSelect.value;
+        if (!selectedStop) {
+          showError("Please select a station.");
+          return;
+        }
+
+        showLoading(true);
+        hideError();
+        hideResults();
+
+        try {
+          const response = await fetch(`/times/both/${selectedStop}/3`);
+          const data = await response.json();
+          if (data.status === "200")
+            displayResults(data.inbound, data.outbound);
+          else throw new Error(data.error || "Failed to fetch times");
+        } catch (error) {
+          showError(`Error: ${error.message}`);
+        } finally {
+          showLoading(false);
+        }
+      }
+
+      async function resetTrainTimings() {
+        const stopSelect = document.getElementById("stopSelect");
+        const selectedStop = stopSelect.value;
+        if (!selectedStop) {
+          showError("Please select a station.");
+          return;
+        }
+
+        showLoading(true);
+        hideError();
+
+        try {
+          const response = await fetch(
+            `/times/reset?stopId=${encodeURIComponent(selectedStop)}&nextnum=3`,
+          );
+          const data = await response.json();
+          if (data.status === "200" && data.inbound !== undefined)
+            displayResults(data.inbound, data.outbound);
+        } catch (error) {
+          showError(`Error: ${error.message}`);
+        } finally {
+          showLoading(false);
+        }
+      }
+
+      function startAutoRefresh() {
+        const stopSelect = document.getElementById("stopSelect");
+        if (!stopSelect.value) {
+          showError("Please select a station.");
+          return;
+        }
+        const seconds =
+          parseInt(document.getElementById("refreshInterval").value, 10) || 30;
+        const ms = Math.max(10000, seconds * 1000);
+        if (autoRefreshTimer) clearInterval(autoRefreshTimer);
+        autoRefreshTimer = setInterval(resetTrainTimings, ms);
+        document.getElementById("startRefreshBtn").style.display = "none";
+        document.getElementById("stopRefreshBtn").style.display =
+          "inline-block";
+        resetTrainTimings();
+      }
+
+      function stopAutoRefresh() {
+        if (autoRefreshTimer) {
+          clearInterval(autoRefreshTimer);
+          autoRefreshTimer = null;
+        }
+        document.getElementById("startRefreshBtn").style.display =
+          "inline-block";
+        document.getElementById("stopRefreshBtn").style.display = "none";
+      }
+
+      function displayResults(inbound, outbound) {
+        const inboundList = document.getElementById("inboundList");
+        const outboundList = document.getElementById("outboundList");
+        inboundList.innerHTML = "";
+        outboundList.innerHTML = "";
+
+        if (inbound && inbound.length > 0) {
+          inbound.forEach((train) =>
+            inboundList.appendChild(createTrainListItem(train)),
+          );
+        } else
+          inboundList.innerHTML =
+            '<li class="no-trains">No inbound trains</li>';
+
+        if (outbound && outbound.length > 0) {
+          outbound.forEach((train) =>
+            outboundList.appendChild(createTrainListItem(train)),
+          );
+        } else
+          outboundList.innerHTML =
+            '<li class="no-trains">No outbound trains</li>';
+
+        document.getElementById("results").style.display = "grid";
+      }
+
+      function createTrainListItem(train) {
+        const li = document.createElement("li");
+        li.className = "train-item";
+        li.innerHTML = `<div class="train-time">${train.time}</div>
+                            <div class="train-destination">${train.endStop ? "To: " + train.endStop : "Destination N/A"}</div>`;
+        return li;
+      }
+
+      function showLoading(show) {
+        document.getElementById("loading").style.display = show
+          ? "block"
+          : "none";
+      }
+      function hideResults() {
+        document.getElementById("results").style.display = "none";
+      }
+      function showError(msg) {
+        const error = document.getElementById("error");
+        error.textContent = msg;
+        error.style.display = "block";
+      }
+      function hideError() {
+        document.getElementById("error").style.display = "none";
+      }
+
+      /** Redirects to GitHub New Issue page with pre-filled fields */
+
+      (function initFeedbackModal() {
+        const backdrop = document.getElementById("feedbackModalBackdrop");
+        const modal = document.getElementById("feedbackModal");
+        const openBtn = document.getElementById("openFeedbackBtn");
+        const closeBtn = document.getElementById("closeFeedbackBtn");
+        const form = document.getElementById("feedbackForm");
+        const statusEl = document.getElementById("feedbackStatus");
+        const submitBtn = document.getElementById("feedbackSubmitBtn");
+        let lastFocus = null;
+
+        function openModal() {
+          lastFocus = document.activeElement;
+          backdrop.classList.add("is-open");
+          backdrop.setAttribute("aria-hidden", "false");
+          modal.focus();
+        }
+
+        function closeModal() {
+          backdrop.classList.remove("is-open");
+          backdrop.setAttribute("aria-hidden", "true");
+          statusEl.textContent = "";
+          statusEl.className = "modal-status";
+          if (lastFocus && lastFocus.focus) lastFocus.focus();
+        }
+
+        openBtn.addEventListener("click", openModal);
+        closeBtn.addEventListener("click", closeModal);
+        backdrop.addEventListener("click", (e) => {
+          if (e.target === backdrop) closeModal();
+        });
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && backdrop.classList.contains("is-open"))
+            closeModal();
+        });
+
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          statusEl.textContent = "Submitting...";
+          statusEl.className = "modal-status";
+          
+          const title = document.getElementById("feedbackTitle").value.trim();
+          const type = document.getElementById("feedbackOption").value;
+          const description = document.getElementById("feedbackDescription").value.trim();
+          
+          const payload = {
+            title: title,
+            body: `**Type:** ${type}\n\n**Description:**\n${description}`,
+            labels: ["Bug/Feat"]
+          };
+
+          submitBtn.disabled = true;
+
+          try {
+            const res = await fetch("/feedback", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(payload),
             });
-        };
 
-        let autoRefreshTimer = null;
-
-        async function getTrainTimes() {
-            const stopSelect = document.getElementById('stopSelect');
-            const selectedStop = stopSelect.value;
-            if (!selectedStop) { showError('Please select a station.'); return; }
-
-            showLoading(true);
-            hideError();
-            hideResults();
-
-            try {
-                const response = await fetch(`/times/both/${selectedStop}/3`);
-                const data = await response.json();
-                if (data.status === "200") displayResults(data.inbound, data.outbound);
-                else throw new Error(data.error || 'Failed to fetch times');
-            } catch (error) {
-                showError(`Error: ${error.message}`);
-            } finally {
-                showLoading(false);
+            // Handle non-JSON responses (like 404 HTML pages)
+            const contentType = res.headers.get("content-type");
+            if (!contentType || !contentType.includes("application/json")) {
+              const text = await res.text();
+              console.error("Non-JSON Response:", text);
+              throw new Error("Backend not active. Please ensure /api/feedback.js is deployed and environment variables are set.");
             }
-        }
 
-        async function resetTrainTimings() {
-            const stopSelect = document.getElementById('stopSelect');
-            const selectedStop = stopSelect.value;
-            if (!selectedStop) { showError('Please select a station.'); return; }
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || `Server Error: ${res.status}`);
 
-            showLoading(true);
-            hideError();
-
-            try {
-                const response = await fetch(`/times/reset?stopId=${encodeURIComponent(selectedStop)}&nextnum=3`);
-                const data = await response.json();
-                if (data.status === "200" && data.inbound !== undefined) displayResults(data.inbound, data.outbound);
-            } catch (error) {
-                showError(`Error: ${error.message}`);
-            } finally {
-                showLoading(false);
-            }
-        }
-
-        function startAutoRefresh() {
-            const stopSelect = document.getElementById('stopSelect');
-            if (!stopSelect.value) { showError('Please select a station.'); return; }
-            const seconds = parseInt(document.getElementById('refreshInterval').value, 10) || 30;
-            const ms = Math.max(10000, seconds * 1000);
-            if (autoRefreshTimer) clearInterval(autoRefreshTimer);
-            autoRefreshTimer = setInterval(resetTrainTimings, ms);
-            document.getElementById('startRefreshBtn').style.display = 'none';
-            document.getElementById('stopRefreshBtn').style.display = 'inline-block';
-            resetTrainTimings();
-        }
-
-        function stopAutoRefresh() {
-            if (autoRefreshTimer) { clearInterval(autoRefreshTimer); autoRefreshTimer = null; }
-            document.getElementById('startRefreshBtn').style.display = 'inline-block';
-            document.getElementById('stopRefreshBtn').style.display = 'none';
-        }
-
-        function displayResults(inbound, outbound) {
-            const inboundList = document.getElementById('inboundList');
-            const outboundList = document.getElementById('outboundList');
-            inboundList.innerHTML = '';
-            outboundList.innerHTML = '';
+            statusEl.textContent = "Thank you! Your report has been submitted.";
+            statusEl.className = "modal-status ok";
             
-            if (inbound && inbound.length > 0) {
-                inbound.forEach(train => inboundList.appendChild(createTrainListItem(train)));
-            } else inboundList.innerHTML = '<li class="no-trains">No inbound trains</li>';
-            
-            if (outbound && outbound.length > 0) {
-                outbound.forEach(train => outboundList.appendChild(createTrainListItem(train)));
-            } else outboundList.innerHTML = '<li class="no-trains">No outbound trains</li>';
-            
-            document.getElementById('results').style.display = 'grid';
-        }
-
-        function createTrainListItem(train) {
-            const li = document.createElement('li');
-            li.className = 'train-item';
-            li.innerHTML = `<div class="train-time">${train.time}</div>
-                            <div class="train-destination">${train.endStop ? 'To: ' + train.endStop : 'Destination N/A'}</div>`;
-            return li;
-        }
-
-        function showLoading(show) { document.getElementById('loading').style.display = show ? 'block' : 'none'; }
-        function hideResults() { document.getElementById('results').style.display = 'none'; }
-        function showError(msg) { 
-            const error = document.getElementById('error');
-            error.textContent = msg;
-            error.style.display = 'block';
-        }
-        function hideError() { document.getElementById('error').style.display = 'none'; }
-
-        /** Placeholder API — replace with your backend route when ready */
-        const FEEDBACK_ENDPOINT = 'https://jsonplaceholder.typicode.com/posts';
-
-        (function initFeedbackModal() {
-            const backdrop = document.getElementById('feedbackModalBackdrop');
-            const modal = document.getElementById('feedbackModal');
-            const openBtn = document.getElementById('openFeedbackBtn');
-            const closeBtn = document.getElementById('closeFeedbackBtn');
-            const form = document.getElementById('feedbackForm');
-            const statusEl = document.getElementById('feedbackStatus');
-            const submitBtn = document.getElementById('feedbackSubmitBtn');
-            let lastFocus = null;
-
-            function openModal() {
-                lastFocus = document.activeElement;
-                backdrop.classList.add('is-open');
-                backdrop.setAttribute('aria-hidden', 'false');
-                modal.focus();
-            }
-
-            function closeModal() {
-                backdrop.classList.remove('is-open');
-                backdrop.setAttribute('aria-hidden', 'true');
-                statusEl.textContent = '';
-                statusEl.className = 'modal-status';
-                if (lastFocus && lastFocus.focus) lastFocus.focus();
-            }
-
-            openBtn.addEventListener('click', openModal);
-            closeBtn.addEventListener('click', closeModal);
-            backdrop.addEventListener('click', (e) => {
-                if (e.target === backdrop) closeModal();
-            });
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && backdrop.classList.contains('is-open')) closeModal();
-            });
-
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                statusEl.textContent = '';
-                statusEl.className = 'modal-status';
-                const payload = {
-                    title: document.getElementById('feedbackTitle').value.trim(),
-                    description: document.getElementById('feedbackDescription').value.trim(),
-                    option: document.getElementById('feedbackOption').value,
-                };
-                submitBtn.disabled = true;
-                try {
-                    const res = await fetch(FEEDBACK_ENDPOINT, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload),
-                    });
-                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                    await res.json();
-                    statusEl.textContent = 'Sent — replace FEEDBACK_ENDPOINT with your API when ready.';
-                    statusEl.className = 'modal-status ok';
-                    form.reset();
-                    setTimeout(closeModal, 1500);
-                } catch (err) {
-                    statusEl.textContent = 'Could not send: ' + (err.message || 'unknown error');
-                    statusEl.className = 'modal-status err';
-                } finally {
-                    submitBtn.disabled = false;
-                }
-            });
-        })();
+            form.reset();
+            setTimeout(closeModal, 2500);
+          } catch (err) {
+            console.error("Feedback Submission Error:", err);
+            statusEl.textContent = err.message;
+            statusEl.className = "modal-status err";
+          } finally {
+            submitBtn.disabled = false;
+          }
+        });
+      })();
     </script>
-</body>
+  </body>
 </html>
