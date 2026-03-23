@@ -492,13 +492,15 @@
           
           const title = document.getElementById("feedbackTitle").value.trim();
           const type = document.getElementById("feedbackOption").value;
+          const typearray = [];
+          typearray.push(type);
           const description = document.getElementById("feedbackDescription").value.trim();
           const email = document.getElementById("feedbackEmail").value.trim();
           
           const payload = {
             title: title,
             body: `**Type:** ${type}\n\n**From**\n${email}**Description:**\n${description}`,
-            labels: type
+            labels: typearray
           };
 
           submitBtn.disabled = true;
