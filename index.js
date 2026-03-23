@@ -34,8 +34,13 @@ const app = new Hono();
 const port = 3000;
 // console.log(`🚀 Server running at http://localhost:${port}`);
 
-// Serve static files from the public directory
+// Serve static files from the public directory (local dev; on Vercel, files in public/ are on the CDN)
 app.use('/*', serveStatic({ root: './public' }));
+
+// If the request reaches the function for `/` (e.g. routing order), send users to the static page
+if (process.env.VERCEL === '1') {
+  app.get('/', (c) => c.redirect('/index.html', 302));
+}
 
 app.get('/docs', (c) => c.redirect('/docs.html', 301));
 
