@@ -1,14 +1,38 @@
 /* MBTA-SDK — shared styles (index, docs, data) */
 
 :root {
-    --primary: #003da5;
+    /* --primary: #003da5;
     --secondary: #7c878e;
     --accent: #ed1c24;
     --background: #f8f9fa;
     --text: #212529;
     --white: #ffffff;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --radius: 8px;
+    --radius: 8px; */
+/* Option from Claude 1 */
+/* 
+    --primary: #1e2226;
+--secondary: #7a7570;
+--accent: #3d7a5e;
+--background: #f5f4f1;
+--text: #18191b;
+--white: #ffffff;
+--shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+--radius: 5px;  */
+--primary: #365959;
+--secondary: #003052ff;
+--accent: #a61c3cff;
+--background: #f4f3f0;
+--text: #1c1f23;
+--white: #FFFFFB;
+--shadow: 0 2px 8px rgba(27, 47, 94, 0.10);
+--radius: 6px; 
+/* 
+--linen: #fff6ebff;
+--punch-red: #ef233cff;
+--pine-blue: #4d7f80ff;
+--deep-space-blue: #003052ff;
+--cherry-rose: #a61c3cff; */
 }
 
 * {
