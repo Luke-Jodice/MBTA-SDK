@@ -2,144 +2,236 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>T-Bridge API Documentation</title>
+  <title>API Documentation | MBTA-SDK</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    ul {display: flex; list-style: none; text-align: center; justify-content: center; margin:0; padding:0}
-    li {display: inline-block; padding-right: 10px;}
-    li a{text-decoration: none; color:#333}
-    li a:hover{font-weight: bold;}
-    body { font-family: sans-serif; margin: 2em; line-height: 1.6; color: #333; }
-    h1 { border-bottom: 2px solid #ccc; padding-bottom: 0.3em; }
-    h2 { margin-top: 1.5em; }
-    code { background: #f4f4f4; padding: 2px 4px; border-radius: 4px; }
-    section { margin-bottom: 2em; }
-    .path { font-weight: bold; margin-top: 1em; }
-    pre { background: #f9f9f9; padding: 1em; overflow-x: auto; border: 1px solid #ddd; }
+    :root {
+      --primary: #003da5;
+      --secondary: #7c878e;
+      --background: #f8f9fa;
+      --text: #212529;
+      --white: #ffffff;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    body { 
+      font-family: 'Segoe UI', Roboto, Arial, sans-serif; 
+      line-height: 1.6; 
+      color: var(--text); 
+      background: var(--background);
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      background-color: var(--primary);
+      color: var(--white);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: var(--white);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    h1 { 
+      border-bottom: 2px solid var(--primary); 
+      padding-bottom: 0.3em; 
+      color: var(--primary);
+      margin-top: 0;
+    }
+
+    h2 { margin-top: 2em; color: var(--primary); }
+    
+    ul.api-nav {
+      display: flex;
+      list-style: none;
+      padding: 1rem;
+      background: #eee;
+      border-radius: 5px;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    ul.api-nav li a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: bold;
+    }
+
+    ul.api-nav li a:hover { color: var(--primary); }
+
+    code { 
+      background: #f4f4f4; 
+      padding: 2px 6px; 
+      border-radius: 4px; 
+      font-family: 'Courier New', Courier, monospace;
+      color: #d63384;
+    }
+
+    .path { 
+      font-weight: bold; 
+      margin-top: 1.5rem; 
+      font-size: 1.1rem;
+    }
+
+    pre { 
+      background: #2d3436; 
+      color: #dfe6e9;
+      padding: 1.5rem; 
+      overflow-x: auto; 
+      border-radius: 8px;
+      margin-top: 0.5rem;
+    }
+
+    section { margin-bottom: 3rem; }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--secondary);
+      font-size: 0.9em;
+    }
+
+    @media (max-width: 768px) {
+      ul.api-nav { flex-direction: column; text-align: center; }
+    }
   </style>
 </head>
 <body>
 
-  <h1>T-Bridge API Endpoints</h1>
-  <!-- <section>
-    <h2>Health & Utility</h2>
+  <nav>
+    <a href="/" style="font-weight: bold; font-size: 1.2rem;">🚇 MBTA-SDK</a>
+    <div style="display: flex; gap: 1.5rem;">
+        <a href="/">Home</a>
+        <a href="/docs">Docs</a>
+        <a href="/data">Data Points</a>
+    </div>
+  </nav>
 
-    <p class="path"><code>GET /health</code></p>
-    <p>Returns API health status and current timestamp.</p>
-    <pre><code>{
-  "status": "healthy",
-  "timestamp": "2025-09-15T12:34:56.789Z"
-}</code></pre>
+  <div class="container">
+    <h1>T-Bridge API Documentation</h1>
 
-    <p class="path"><code>GET /hello?name=YourName</code></p>
-    <p>Greets the user. Optional query parameter <code>name</code> (default is "World").</p>
-    <pre><code>{
-  "message": "Hello, Alice!",
-  "timestamp": "2025-09-15T12:34:56.789Z"
-}</code></pre>
-  </section> -->
-<ul>
-  <li><a href="#train-info">Train Information</a></li>
-  <li><a href="#lines">Lines</a></li>
-  <li><a href="#static">Static Data</a></li>
-  <li><a href="#live">Live Data</a></li>
-</ul>
+    <ul class="api-nav">
+      <li><a href="#train-info">Train Information</a></li>
+      <li><a href="#lines">Lines</a></li>
+      <!-- <li><a href="#static">Static Data</a></li> -->
+      <li><a href="#live">Live Data</a></li>
+    </ul>
 
-  <section>
-    <h2 id="train-info">Train Information</h2>
+    <section>
+      <h2 id="train-info">Train Information</h2>
 
-    <p class="path"><code>GET /train/:name</code></p>
-    <p>Returns stop data for all stops that match the given <code>name</code>.</p>
-    <pre><code>{
+      <p class="path"><code>GET /train/:name</code></p>
+      <p>Returns stop data for all stops that match the given <code>name</code>.</p>
+      <pre><code>{
   "status": "200",
   "train": "State",
   "stops": [ { "id": "70041", "name": "State", "line": "Blue Line" } ],
   "count": 1
 }</code></pre>
 
-    <p class="path"><code>GET /train/id/:id</code></p>
-    <p>Returns stop details for a specific stop ID. Returns <code>404</code> if not found.</p>
-    <pre><code>{
+      <p class="path"><code>GET /train/id/:id</code></p>
+      <p>Returns stop details for a specific stop ID. Returns <code>404</code> if not found.</p>
+      <pre><code>{
   "status": "200",
   "stop": { "id": "70041", "name": "State", "line": "Blue Line" }
 }</code></pre>
 
-    <p class="path"><code>GET /train/closest/:lat/:long</code></p>
-    <p>Finds the stop closest to the given latitude and longitude. Returns stop details and distance.</p>
-    <pre><code>{
+      <p class="path"><code>GET /train/closest/:lat/:long</code></p>
+      <p>Finds the stop closest to the given latitude and longitude. Returns stop details and distance.</p>
+      <pre><code>{
   "status": "200",
   "closestStop": { "id": "70041", "name": "State", "line": "Blue Line" },
   "distance": 0.0023
 }</code></pre>
-  </section>
+    </section>
 
-  <section>
-    <h2 id="lines">Lines</h2>
+    <section>
+      <h2 id="lines">Lines</h2>
 
-    <p class="path"><code>GET /line/:name</code></p>
-    <p>Returns all stops along the given line name, with a total count.</p>
-    <pre><code>{
+      <p class="path"><code>GET /line/:name</code></p>
+      <p>Returns all stops along the given line name, with a total count.</p>
+      <pre><code>{
   "status": "200",
   "line": "Blue Line",
   "stops": [ { "id": "70041", "name": "State" }, { "id": "70042", "name": "Airport" } ],
   "count": 2
 }</code></pre>
 
-    <p class="path"><code>GET /route/:start/:end</code></p>
-    <p>Intended to return route information between two stops, but currently not implemented.</p>
-  </section>
+      <p class="path"><code>GET /route/:start/:end</code></p>
+      <p>Intended to return route information between two stops (currently not implemented).</p>
+    </section>
 
-  <section>
-    <h2 id="static">Static Data</h2>
+    <section>
+      <!-- <h2 id="static">Static Data</h2>
 
-    <p class="path"><code>GET /orgstops-e</code></p>
-    <p>Returns the raw stop data JSON used internally.</p>
-    <pre><code>{
+      <p class="path"><code>GET /orgstops-e</code></p>
+      <p>Returns the raw stop data JSON used internally.</p>
+      <pre><code>{
   "stops": [ { "id": "70041", "name": "State" }, { "id": "70042", "name": "Airport" } ]
-}</code></pre>
+}</code></pre> -->
 
-    <p class="path"><code>GET /maindata</code></p>
-    <p>Returns the main data JSON set used internally.</p>
-    <pre><code>{
+      <!-- <p class="path"><code>GET /maindata</code></p>
+      <p>Returns the main data JSON set used internally.</p>
+      <pre><code>{
   "lines": [ "Blue Line", "Orange Line" ],
   "metadata": { "updated": "2025-09-15T12:34:56Z" }
 }</code></pre>
-  </section>
+    </section> -->
 
-  <section>
-    <h2 id="live">Live Data</h2>
+    <section>
+      <h2 id="live">Live Data</h2>
 
-    <p class="path"><code>GET /times/both/:stopId/:nextnum</code></p>
-    <p>Returns the next <code>nextnum</code> inbound and outbound trains for the stop with ID <code>stopId</code>.</p>
-    <pre><code>{
+      <p class="path"><code>GET /times/both/:stopId/:nextnum</code></p>
+      <p>Returns the next <code>nextnum</code> inbound and outbound trains for the stop with ID <code>stopId</code>.</p>
+      <pre><code>{
   "status": "200",
   "stopId": "70041",
   "inbound": [ "Train A at 12:40", "Train B at 12:55" ],
   "outbound": [ "Train C at 12:42", "Train D at 12:58" ]
 }</code></pre>
 
-    <p class="path"><code>GET /times/in/:stopId/:nextnum</code></p>
-    <p>Returns the next <code>nextnum</code> inbound trains for the stop with ID <code>stopId</code>.</p>
-    <pre><code>{
+      <p class="path"><code>GET /times/in/:stopId/:nextnum</code></p>
+      <p>Returns the next <code>nextnum</code> inbound trains for the stop with ID <code>stopId</code>.</p>
+      <pre><code>{
   "status": "200",
   "stopId": "70041",
   "direction": "inbound",
   "data": [ "Train A at 12:40", "Train B at 12:55" ]
 }</code></pre>
 
-    <p class="path"><code>GET /times/out/:stopId/:nextnum</code></p>
-    <p>Returns the next <code>nextnum</code> outbound trains for the stop with ID <code>stopId</code>.</p>
-    <pre><code>{
+      <p class="path"><code>GET /times/out/:stopId/:nextnum</code></p>
+      <p>Returns the next <code>nextnum</code> outbound trains for the stop with ID <code>stopId</code>.</p>
+      <pre><code>{
   "status": "200",
   "stopId": "70041",
   "direction": "outbound",
   "data": [ "Train C at 12:42", "Train D at 12:58" ]
 }</code></pre>
-  </section>
+    </section>
+  </div>
 
-  <footer style="margin-top:2em; font-size:0.9em; color:#666;">
-    &copy; 2025 T-Bridge API
+  <footer>
+    &copy; 2026 MBTA-SDK Project. Not affiliated with the MBTA.
   </footer>
-<div id="bottom"></div>
+
 </body>
 </html>

@@ -1,0 +1,884 @@
+[
+  {
+    "name": "Science Park/West End",
+    "line_short": "place-spmnl",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Boylston",
+    "line_short": "place-boyls",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Dean Road",
+    "line_short": "place-denrd",
+    "train_line": "Green Line",
+    "municipality": "Brookline",
+    "id": null
+  },
+  {
+    "name": "Copley",
+    "line_short": "place-coecl",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Boston University Central",
+    "line_short": "place-bucen",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Milton",
+    "line_short": "place-miltt",
+    "train_line": "Mattapan Trolley",
+    "municipality": "Milton",
+    "id": null
+  },
+  {
+    "name": "Saint Paul Street",
+    "line_short": "place-stpul",
+    "train_line": "Green Line",
+    "municipality": "Brookline",
+    "id": null
+  },
+  {
+    "name": "Symphony",
+    "line_short": "place-symcl",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Griggs Street",
+    "line_short": "place-grigg",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Chestnut Hill Avenue",
+    "line_short": "place-chill",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Beaconsfield",
+    "line_short": "place-bcnfd",
+    "train_line": "Green Line",
+    "municipality": "Brookline",
+    "id": null
+  },
+  {
+    "name": "Kenmore",
+    "line_short": "place-kencl",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Government Center",
+    "line_short": "place-gover",
+    "train_line": "Blue Line",
+    "municipality": "Boston",
+    "id": "70040"
+  },
+  {
+    "name": "Englewood Avenue",
+    "line_short": "place-engav",
+    "train_line": "Green Line",
+    "municipality": "Brookline",
+    "id": null
+  },
+  {
+    "name": "Riverside",
+    "line_short": "place-river",
+    "train_line": "Green Line - Park Street & North",
+    "municipality": "Newton",
+    "id": null
+  },
+  {
+    "name": "Mattapan",
+    "line_short": "place-matt",
+    "train_line": "Mattapan Trolley",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Woodland",
+    "line_short": "place-woodl",
+    "train_line": "Green Line",
+    "municipality": "Newton",
+    "id": null
+  },
+  {
+    "name": "Northeastern University",
+    "line_short": "place-nuniv",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Park Street",
+    "line_short": "place-pktrm",
+    "train_line": "Green/Red Line",
+    "municipality": "Boston",
+    "id": "70075"
+  },
+  {
+    "name": "Valley Road",
+    "line_short": "place-valrd",
+    "train_line": "Mattapan Trolley",
+    "municipality": "Milton",
+    "id": null
+  },
+  {
+    "name": "Medford/Tufts",
+    "line_short": "place-mdftf",
+    "train_line": "Green Line",
+    "municipality": "Medford",
+    "id": null
+  },
+  {
+    "name": "Waban",
+    "line_short": "place-waban",
+    "train_line": "Green Line",
+    "municipality": "Newton",
+    "id": null
+  },
+  {
+    "name": "Amory Street",
+    "line_short": "place-amory",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Reservoir",
+    "line_short": "place-rsmnl",
+    "train_line": "Green Line",
+    "municipality": "Brookline",
+    "id": null
+  },
+  {
+    "name": "Blandford Street",
+    "line_short": "place-bland",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "South Street",
+    "line_short": "place-sougr",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Hynes Convention Center",
+    "line_short": "place-hymnl",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Central Avenue",
+    "line_short": "place-cenav",
+    "train_line": "Mattapan Trolley",
+    "municipality": "Milton",
+    "id": null
+  },
+  {
+    "name": "Ashmont",
+    "line_short": "place-asmnl",
+    "train_line": "Mattapan Trolley ;  Red Line",
+    "municipality": "Boston",
+    "id": "70094"
+  },
+  {
+    "name": "Back of the Hill",
+    "line_short": "place-bckhl",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Boston College",
+    "line_short": "place-lake",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Babcock Street",
+    "line_short": "place-babck",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "North Station",
+    "line_short": "place-north",
+    "train_line": "Green/Orange Line",
+    "municipality": "Boston",
+    "id": "70027"
+  },
+  {
+    "name": "Brookline Hills",
+    "line_short": "place-brkhl",
+    "train_line": "Green Line",
+    "municipality": "Brookline",
+    "id": null
+  },
+  {
+    "name": "Ball Square",
+    "line_short": "place-balsq",
+    "train_line": "Green Line",
+    "municipality": "Medford",
+    "id": null
+  },
+  {
+    "name": "East Somerville",
+    "line_short": "place-esomr",
+    "train_line": "Green Line",
+    "municipality": "Somerville",
+    "id": null
+  },
+  {
+    "name": "Museum of Fine Arts",
+    "line_short": "place-mfa",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Eliot",
+    "line_short": "place-eliot",
+    "train_line": "Green Line",
+    "municipality": "Newton",
+    "id": null
+  },
+  {
+    "name": "Boston University East",
+    "line_short": "place-buest",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Heath Street",
+    "line_short": "place-hsmnl",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Chestnut Hill",
+    "line_short": "place-chhil",
+    "train_line": "Green Line",
+    "municipality": "Newton",
+    "id": null
+  },
+  {
+    "name": "Prudential",
+    "line_short": "place-prmnl",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Butler",
+    "line_short": "place-butlr",
+    "train_line": "Mattapan Trolley",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Coolidge Corner",
+    "line_short": "place-cool",
+    "train_line": "Green Line",
+    "municipality": "Brookline",
+    "id": null
+  },
+  {
+    "name": "Hawes Street",
+    "line_short": "place-hwsst",
+    "train_line": "Green Line",
+    "municipality": "Brookline",
+    "id": null
+  },
+  {
+    "name": "Brandon Hall",
+    "line_short": "place-bndhl",
+    "train_line": "Green Line",
+    "municipality": "Brookline",
+    "id": null
+  },
+  {
+    "name": "Gilman Square",
+    "line_short": "place-gilmn",
+    "train_line": "Green Line",
+    "municipality": "Somerville",
+    "id": null
+  },
+  {
+    "name": "Cedar Grove",
+    "line_short": "place-cedgr",
+    "train_line": "Mattapan Trolley",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Mission Park",
+    "line_short": "place-mispk",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Arlington",
+    "line_short": "place-armnl",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Haymarket",
+    "line_short": "place-haecl",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": "70025"
+  },
+  {
+    "name": "Fenway",
+    "line_short": "place-fenwy",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Warren Street",
+    "line_short": "place-wrnst",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Allston Street",
+    "line_short": "place-alsgr",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Newton Highlands",
+    "line_short": "place-newtn",
+    "train_line": "Green Line",
+    "municipality": "Newton",
+    "id": null
+  },
+  {
+    "name": "Brigham Circle",
+    "line_short": "place-brmnl",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Longwood",
+    "line_short": "place-longw",
+    "train_line": "Green Line",
+    "municipality": "Brookline",
+    "id": null
+  },
+  {
+    "name": "Harvard Avenue",
+    "line_short": "place-harvd",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Cleveland Circle",
+    "line_short": "place-clmnl",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Brookline Village",
+    "line_short": "place-bvmnl",
+    "train_line": "Green Line",
+    "municipality": "Brookline",
+    "id": null
+  },
+  {
+    "name": "Kent Street",
+    "line_short": "place-kntst",
+    "train_line": "Green Line",
+    "municipality": "Brookline",
+    "id": null
+  },
+  {
+    "name": "Magoun Square",
+    "line_short": "place-mgngl",
+    "train_line": "Green Line",
+    "municipality": "Somerville",
+    "id": null
+  },
+  {
+    "name": "Saint Mary's Street",
+    "line_short": "place-smary",
+    "train_line": "Green Line",
+    "municipality": "Brookline",
+    "id": null
+  },
+  {
+    "name": "Chiswick Road",
+    "line_short": "place-chswk",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Sutherland Road",
+    "line_short": "place-sthld",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Union Square",
+    "line_short": "place-unsqu",
+    "train_line": "Green Line - Copley & West",
+    "municipality": "Somerville",
+    "id": null
+  },
+  {
+    "name": "Airport",
+    "line_short": "place-aport",
+    "train_line": "Blue Line",
+    "municipality": "Boston",
+    "id": "70047"
+  },
+  {
+    "name": "Aquarium",
+    "line_short": "place-aqucl",
+    "train_line": "Blue Line",
+    "municipality": "Boston",
+    "id": "70043"
+  },
+  {
+    "name": "Beachmont",
+    "line_short": "place-bmmnl",
+    "train_line": "Blue Line",
+    "municipality": "Revere",
+    "id": "70055"
+  },
+  {
+    "name": "Bowdoin",
+    "line_short": "place-bomnl",
+    "train_line": "Blue Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Maverick",
+    "line_short": "place-mvbcl",
+    "train_line": "Blue Line",
+    "municipality": "Boston",
+    "id": "70045"
+  },
+  {
+    "name": "Orient Heights",
+    "line_short": "place-orhte",
+    "train_line": "Blue Line",
+    "municipality": "Boston",
+    "id": "70052"
+  },
+  {
+    "name": "Revere Beach",
+    "line_short": "place-rbmnl",
+    "train_line": "Blue Line",
+    "municipality": "Revere",
+    "id": "70057"
+  },
+  {
+    "name": "State",
+    "line_short": "place-state",
+    "train_line": "Blue Line",
+    "municipality": "Boston",
+    "id": "70041"
+  },
+  {
+    "name": "Suffolk Downs",
+    "line_short": "place-sdmnl",
+    "train_line": "Blue Line",
+    "municipality": "Boston",
+    "id": "70054"
+  },
+  {
+    "name": "Wonderland",
+    "line_short": "place-wondl",
+    "train_line": "Blue Line",
+    "municipality": "Revere",
+    "id": null
+  },
+  {
+    "name": "Wood Island",
+    "line_short": "place-wimnl",
+    "train_line": "Blue Line",
+    "municipality": "Boston",
+    "id": "70050"
+  },
+  {
+    "name": "Boston University West",
+    "line_short": "place-buwst",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Fairbanks Street",
+    "line_short": "place-fbkst",
+    "train_line": "Green Line",
+    "municipality": "Brookline",
+    "id": null
+  },
+  {
+    "name": "Fenwood Road",
+    "line_short": "place-fenwd",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Lechmere",
+    "line_short": "place-lech",
+    "train_line": "Green Line",
+    "municipality": "Cambridge",
+    "id": null
+  },
+  {
+    "name": "Longwood Medical Area",
+    "line_short": "place-lngmd",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Newton Centre",
+    "line_short": "place-newto",
+    "train_line": "Green Line",
+    "municipality": "Newton",
+    "id": null
+  },
+  {
+    "name": "Packard's Corner",
+    "line_short": "place-brico",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Riverway",
+    "line_short": "place-rvrwy",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Summit Avenue",
+    "line_short": "place-sumav",
+    "train_line": "Green Line",
+    "municipality": "Brookline",
+    "id": null
+  },
+  {
+    "name": "Tappan Street",
+    "line_short": "place-tapst",
+    "train_line": "Green Line",
+    "municipality": "Brookline",
+    "id": null
+  },
+  {
+    "name": "Washington Square",
+    "line_short": "place-bcnwa",
+    "train_line": "Green Line",
+    "municipality": "Brookline",
+    "id": null
+  },
+  {
+    "name": "Washington Street",
+    "line_short": "place-wascm",
+    "train_line": "Green Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Capen Street",
+    "line_short": "place-capst",
+    "train_line": "Mattapan Trolley",
+    "municipality": "Milton",
+    "id": null
+  },
+  {
+    "name": "Assembly",
+    "line_short": "place-astao",
+    "train_line": "Orange Line",
+    "municipality": "Somerville",
+    "id": "70279"
+  },
+  {
+    "name": "Back Bay",
+    "line_short": "place-bbsta",
+    "train_line": "Orange Line",
+    "municipality": "Boston",
+    "id": "70014"
+  },
+  {
+    "name": "Chinatown",
+    "line_short": "place-chncl",
+    "train_line": "Orange Line",
+    "municipality": "Boston",
+    "id": "70018"
+  },
+  {
+    "name": "Community College",
+    "line_short": "place-ccmnl",
+    "train_line": "Orange Line",
+    "municipality": "Boston",
+    "id": "70029"
+  },
+  {
+    "name": "Downtown Crossing",
+    "line_short": "place-dwnxg",
+    "train_line": "Orange Line",
+    "municipality": "Boston",
+    "id": "70021"
+  },
+  {
+    "name": "Forest Hills",
+    "line_short": "place-forhl",
+    "train_line": "Orange Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Green Street",
+    "line_short": "place-grnst",
+    "train_line": "Orange Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Jackson Square",
+    "line_short": "place-jaksn",
+    "train_line": "Orange Line",
+    "municipality": "Boston",
+    "id": "70006"
+  },
+  {
+    "name": "Malden Center",
+    "line_short": "place-mlmnl",
+    "train_line": "Orange Line",
+    "municipality": "Malden",
+    "id": "70034"
+  },
+  {
+    "name": "Massachusetts Avenue",
+    "line_short": "place-masta",
+    "train_line": "Orange Line",
+    "municipality": "Boston",
+    "id": "70012"
+  },
+  {
+    "name": "Oak Grove",
+    "line_short": "place-ogmnl",
+    "train_line": "Orange Line",
+    "municipality": "Malden",
+    "id": null
+  },
+  {
+    "name": "Roxbury Crossing",
+    "line_short": "place-rcmnl",
+    "train_line": "Orange Line",
+    "municipality": "Boston",
+    "id": "70008"
+  },
+  {
+    "name": "Ruggles",
+    "line_short": "place-rugg",
+    "train_line": "Orange Line",
+    "municipality": "Boston",
+    "id": "70010"
+  },
+  {
+    "name": "Stony Brook",
+    "line_short": "place-sbmnl",
+    "train_line": "Orange Line",
+    "municipality": "Boston",
+    "id": "70004"
+  },
+  {
+    "name": "Sullivan Square",
+    "line_short": "place-sull",
+    "train_line": "Orange Line",
+    "municipality": "Boston",
+    "id": "70031"
+  },
+  {
+    "name": "Tufts Medical Center",
+    "line_short": "place-tumnl",
+    "train_line": "Orange Line",
+    "municipality": "Boston",
+    "id": "70016"
+  },
+  {
+    "name": "Wellington",
+    "line_short": "place-welln",
+    "train_line": "Orange Line",
+    "municipality": "Medford",
+    "id": "70033"
+  },
+  {
+    "name": "Alewife",
+    "line_short": "place-alfcl",
+    "train_line": "Red Line",
+    "municipality": "Cambridge",
+    "id": null
+  },
+  {
+    "name": "Andrew",
+    "line_short": "place-andrw",
+    "train_line": "Red Line",
+    "municipality": "Boston",
+    "id": "70083"
+  },
+  {
+    "name": "Braintree",
+    "line_short": "place-brntn",
+    "train_line": "Red Line",
+    "municipality": "Braintree",
+    "id": null
+  },
+  {
+    "name": "Broadway",
+    "line_short": "place-brdwy",
+    "train_line": "Red Line",
+    "municipality": "Boston",
+    "id": "70081"
+  },
+  {
+    "name": "Central",
+    "line_short": "place-cntsq",
+    "train_line": "Red Line",
+    "municipality": "Cambridge",
+    "id": "70070"
+  },
+  {
+    "name": "Charles/MGH",
+    "line_short": "place-chmnl",
+    "train_line": "Red Line",
+    "municipality": "Boston",
+    "id": "70074"
+  },
+  {
+    "name": "Davis",
+    "line_short": "place-davis",
+    "train_line": "Red Line",
+    "municipality": "Somerville",
+    "id": null
+  },
+  {
+    "name": "Fields Corner",
+    "line_short": "place-fldcr",
+    "train_line": "Red Line",
+    "municipality": "Boston",
+    "id": "70090"
+  },
+  {
+    "name": "Harvard",
+    "line_short": "place-harsq",
+    "train_line": "Red Line",
+    "municipality": "Cambridge",
+    "id": "70068"
+  },
+  {
+    "name": "JFK/UMass",
+    "line_short": "place-jfk",
+    "train_line": "Red Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Kendall/MIT",
+    "line_short": "place-knncl",
+    "train_line": "Red Line",
+    "municipality": "Cambridge",
+    "id": "70072"
+  },
+  {
+    "name": "North Quincy",
+    "line_short": "place-nqncy",
+    "train_line": "Red Line",
+    "municipality": "Quincy",
+    "id": "70098"
+  },
+  {
+    "name": "Porter",
+    "line_short": "place-portr",
+    "train_line": "Red Line",
+    "municipality": "Cambridge",
+    "id": "70066"
+  },
+  {
+    "name": "Quincy Adams",
+    "line_short": "place-qamnl",
+    "train_line": "Red Line",
+    "municipality": "Quincy",
+    "id": null
+  },
+  {
+    "name": "Quincy Center",
+    "line_short": "place-qnctr",
+    "train_line": "Red Line",
+    "municipality": "Quincy",
+    "id": "70102"
+  },
+  {
+    "name": "Savin Hill",
+    "line_short": "place-shmnl",
+    "train_line": "Red Line",
+    "municipality": "Boston",
+    "id": "70088"
+  },
+  {
+    "name": "Shawmut",
+    "line_short": "place-smmnl",
+    "train_line": "Red Line",
+    "municipality": "Boston",
+    "id": "70092"
+  },
+  {
+    "name": "South-station",
+    "line_short": "place-sstat",
+    "train_line": "Red Line",
+    "municipality": "Boston",
+    "id": null
+  },
+  {
+    "name": "Wollaston",
+    "line_short": "place-wlsta",
+    "train_line": "Red Line",
+    "municipality": "Quincy",
+    "id": "70100"
+  }
+]

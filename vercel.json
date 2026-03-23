@@ -16,6 +16,10 @@
       "dest": "/public/docs.html"
     },
     {
+      "src": "/data",
+      "dest": "/public/data.html"
+    },
+    {
       "handle": "filesystem"
     },
     {

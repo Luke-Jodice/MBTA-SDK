@@ -39,7 +39,9 @@ app.use('/*', serveStatic({ root: './public' }));
 
 app.get('/docs', (c) => c.redirect('/docs.html', 301));
 
-app.get('/', (c) => {
+app.get('/data', (c) => c.redirect('/data.html', 301));
+
+app.get('/api', (c) => {
   const welcomeMessage = asciiArt + '\n\nDeveloped by Luke Jodice (luke-jodice) on Github\n\nPlease read our documentation on the different available calls that we have available to the public\n\nPlease see the following endpoints for a little bit more information\n\n/docs - Documentation \n\n/index - Live demo of a Usecase for this';
   return c.text(welcomeMessage,200);
 });

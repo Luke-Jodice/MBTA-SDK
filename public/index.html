@@ -3,8 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MBTA Train Tracker - API</title>
+    <title>MBTA-SDK | Real-time MBTA Train Tracking API</title>
     <style>
+        :root {
+            --primary: #003da5; /* MBTA Blue */
+            --secondary: #7c878e; /* MBTA Silver */
+            --accent: #ed1c24; /* MBTA Red */
+            --background: #f8f9fa;
+            --text: #212529;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,317 +23,418 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--background);
+            scroll-behavior: smooth;
         }
 
-        .container {
+        /* Navigation */
+        nav {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 0.8;
+        }
+
+        /* Hero Section */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, #0056b3 100%);
+            color: var(--white);
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        header p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--white);
+            color: var(--primary);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--white);
+            border: 2px solid var(--white);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 2rem;
             max-width: 1200px;
             margin: 0 auto;
-            background: white;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1rem;
+        }
+
+        /* Live Demo Section */
+        .demo-section {
+            background-color: #e9ecef;
+            padding: 5rem 2rem;
+        }
+
+        .demo-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--white);
             border-radius: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
-        .header {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        .demo-header {
+            background: var(--primary);
             color: white;
-            padding: 30px;
+            padding: 20px;
             text-align: center;
         }
 
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            font-weight: 300;
-        }
-
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        .content {
+        .demo-content {
             padding: 40px;
         }
 
         .controls {
             display: flex;
             gap: 20px;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
             align-items: center;
         }
 
         .select-wrapper {
             flex: 1;
-            min-width: 300px;
+            min-width: 250px;
         }
 
-        .select-wrapper label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        select {
+        select, input[type="number"] {
             width: 100%;
-            padding: 15px;
+            padding: 12px;
             border: 2px solid #e1e5e9;
             border-radius: 10px;
             font-size: 16px;
-            background: white;
-            transition: border-color 0.3s ease;
         }
 
-        select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .btn-demo {
+            background: var(--primary);
             color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            white-space: nowrap;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+            padding: 12px 24px;
         }
 
         .btn-secondary {
-            background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
-        }
-
-        .refresh-controls {
-            margin-top: 10px;
-            margin-bottom: 20px;
-        }
-
-        .refresh-controls label {
-            font-weight: 600;
-            color: #333;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            background: var(--secondary);
+            color: white;
         }
 
         .results {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            gap: 20px;
             margin-top: 30px;
         }
 
         .direction-card {
             background: #f8f9fa;
             border-radius: 15px;
-            padding: 25px;
+            padding: 20px;
             border-left: 5px solid;
         }
 
-        .direction-card.inbound {
-            border-left-color: #28a745;
-        }
+        .direction-card.inbound { border-left-color: #28a745; }
+        .direction-card.outbound { border-left-color: #dc3545; }
 
-        .direction-card.outbound {
-            border-left-color: #dc3545;
-        }
-
-        .direction-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .direction-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 15px;
-            font-weight: bold;
-            color: white;
-        }
-
-        .direction-icon.inbound {
-            background: #28a745;
-        }
-
-        .direction-icon.outbound {
-            background: #dc3545;
-        }
-
-        .direction-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .train-list {
-            list-style: none;
-        }
-
+        .train-list { list-style: none; }
         .train-item {
             background: white;
-            margin-bottom: 15px;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            border-left: 4px solid #667eea;
-        }
-
-        .train-time {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .train-destination {
-            color: #666;
-            font-size: 1rem;
-        }
-
-        .no-trains {
-            text-align: center;
-            color: #666;
-            font-style: italic;
-            padding: 20px;
-        }
-
-        .error {
-            background: #f8d7da;
-            color: #721c24;
+            margin-bottom: 10px;
             padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            border-left: 4px solid #dc3545;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .train-time { font-weight: bold; font-size: 1.2rem; }
+        .train-destination { color: #666; font-size: 0.9rem; }
+
+        /* Quick Start Section */
+        .quick-start {
+            padding: 5rem 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .code-block {
+            background: #2d3436;
+            color: #dfe6e9;
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            font-family: 'Courier New', Courier, monospace;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block::before {
+            content: "Terminal";
+            display: block;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+            color: #636e72;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .footer-links {
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--white);
+            text-decoration: none;
+            opacity: 0.7;
         }
 
         @media (max-width: 768px) {
-            .results {
-                grid-template-columns: 1fr;
-            }
-            
-            .controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .select-wrapper {
-                min-width: auto;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .content {
-                padding: 20px;
-            }
+            header h1 { font-size: 2.5rem; }
+            .results { grid-template-columns: 1fr; }
+            nav { flex-direction: column; gap: 1rem; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🚇 MBTA SDK Usecase Example</h1>
-            <p>Real-time MBTA train tracking</p>
-            <p>Note: This will not include all endpoints as this is a demo of what could be done</p>
+
+    <nav>
+        <div class="logo">🚇 MBTA-SDK</div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#demo">Live Demo</a></li>
+            <li><a href="/docs">API Docs</a></li>
+            <li><a href="/data">Data Points</a></li>
+        </ul>
+    </nav>
+
+    <header id="home">
+        <div class="hero-content">
+            <h1>Real-time MBTA Data at Your Fingertips</h1>
+            <p>A powerful, easy-to-use API wrapper for the Massachusetts Bay Transportation Authority. Get train schedules, station data, and live updates in seconds.</p>
+            <div class="cta-buttons">
+                <a href="#demo" class="btn btn-primary">Try the Demo</a>
+                <a href="/docs" class="btn btn-outline">Read the Docs</a>
+            </div>
         </div>
-        
-        <div class="content">
-            <div class="controls">
-                <div class="select-wrapper">
-                    <label for="stopSelect">Select a Station:</label>
-                    <select id="stopSelect">
-                        <option value="">Choose a station...</option>
-                    </select>
-                </div>
-                <button class="btn" id="getTrainsBtn" onclick="getTrainTimes()">
-                    Get Train Times
-                </button>
-                <button class="btn btn-secondary" id="resetBtn" onclick="resetTrainTimings()" title="Clear and refetch train times">
-                    Reset Timings
-                </button>
+    </header>
+
+    <section class="features" id="features">
+        <div class="section-title">
+            <h2>Why Use MBTA-SDK?</h2>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">⏱️</span>
+                <h3>Real-time Tracking</h3>
+                <p>Accurate, up-to-the-minute train schedules and arrival predictions for all lines.</p>
             </div>
-            <div class="controls refresh-controls">
-                <label for="refreshInterval">Auto-refresh every</label>
-                <input type="number" id="refreshInterval" min="10" max="300" value="30" style="width: 70px; padding: 10px; border-radius: 8px; border: 2px solid #e1e5e9;"> seconds
-                <button class="btn btn-secondary" id="startRefreshBtn" onclick="startAutoRefresh()">Start auto-refresh</button>
-                <button class="btn btn-secondary" id="stopRefreshBtn" onclick="stopAutoRefresh()" style="display: none;">Stop auto-refresh</button>
+            <div class="feature-card">
+                <span class="feature-icon">📍</span>
+                <h3>Station Search</h3>
+                <p>Find stops by name, ID, or use geographical coordinates to find the nearest station.</p>
             </div>
-            
-            <div id="loading" class="loading" style="display: none;">
-                <div class="spinner"></div>
-                <p>Loading train times...</p>
+            <div class="feature-card">
+                <span class="feature-icon">🛤️</span>
+                <h3>Full Coverage</h3>
+                <p>Comprehensive data for Blue, Orange, Red, and Green lines, including all stops and routes.</p>
             </div>
-            
-            <div id="results" class="results" style="display: none;">
-                <div class="direction-card inbound">
-                    <div class="direction-header">
-                        <div class="direction-icon inbound">→</div>
-                        <div class="direction-title">Inbound Trains</div>
+            <div class="feature-card">
+                <span class="feature-icon">🚀</span>
+                <h3>Developer First</h3>
+                <p>Clean RESTful endpoints designed for seamless integration into your next big project.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="demo-section" id="demo">
+        <div class="section-title">
+            <h2>Live Demo</h2>
+            <p>See the SDK in action with our real-time train tracker.</p>
+        </div>
+        <div class="demo-container">
+            <div class="demo-header">
+                <h3>Train Tracker</h3>
+            </div>
+            <div class="demo-content">
+                <div class="controls">
+                    <div class="select-wrapper">
+                        <label for="stopSelect" style="display:block; margin-bottom: 5px; font-weight: 600;">Station:</label>
+                        <select id="stopSelect">
+                            <option value="">Choose a station...</option>
+                        </select>
                     </div>
-                    <ul id="inboundList" class="train-list">
-                    </ul>
+                    <button class="btn btn-demo" id="getTrainsBtn" onclick="getTrainTimes()">Get Times</button>
                 </div>
                 
-                <div class="direction-card outbound">
-                    <div class="direction-header">
-                        <div class="direction-icon outbound">←</div>
-                        <div class="direction-title">Outbound Trains</div>
+                <div class="controls">
+                    <div style="flex:1">
+                        <label for="refreshInterval" style="display:block; margin-bottom: 5px; font-weight: 600;">Auto-refresh (sec):</label>
+                        <input type="number" id="refreshInterval" min="10" max="300" value="30">
                     </div>
-                    <ul id="outboundList" class="train-list">
-                    </ul>
+                    <button class="btn btn-secondary" id="startRefreshBtn" onclick="startAutoRefresh()">Start Auto</button>
+                    <button class="btn btn-secondary" id="stopRefreshBtn" onclick="stopAutoRefresh()" style="display: none;">Stop Auto</button>
+                    <button class="btn btn-secondary" onclick="resetTrainTimings()">Manual Reset</button>
                 </div>
+
+                <div id="loading" style="display: none; text-align: center; padding: 20px;">
+                    <p>Loading...</p>
+                </div>
+                
+                <div id="results" class="results" style="display: none;">
+                    <div class="direction-card inbound">
+                        <h4>Inbound Trains</h4>
+                        <ul id="inboundList" class="train-list"></ul>
+                    </div>
+                    <div class="direction-card outbound">
+                        <h4>Outbound Trains</h4>
+                        <ul id="outboundList" class="train-list"></ul>
+                    </div>
+                </div>
+                
+                <div id="error" style="display: none; color: var(--accent); background: #fee; padding: 10px; border-radius: 5px; margin-top: 10px;"></div>
             </div>
-            
-            <div id="error" class="error" style="display: none;"></div>
         </div>
-    </div>
+    </section>
+
+    <section class="quick-start">
+        <div class="section-title">
+            <h2>Quick Start</h2>
+            <p>Start fetching data in seconds.</p>
+        </div>
+        <div class="code-block">
+            curl https://mbta-sdk.vercel.app/times/both/place-sstat/3
+        </div>
+        <p style="margin-top: 1.5rem; text-align: center;">
+            Check out the <a href="/docs" style="color: var(--primary); font-weight: 600;">Full Documentation</a> for more endpoints.
+        </p>
+    </section>
+
+    <footer>
+        <div class="footer-links">
+            <a href="#home">Home</a>
+            <a href="/docs">API Docs</a>
+            <a href="/data">Data Points</a>
+            <a href="#">GitHub</a>
+        </div>
+        <p>&copy; 2026 MBTA-SDK Project. Not affiliated with the MBTA.</p>
+    </footer>
 
     <script>
-        // Sample stop data - you'll want to populate this from your API
+        // Existing logic maintained from original index.html
         const stops = [
             { id: "place-sstat", name: "South Station" },
             { id: "place-north", name: "North Station" },
@@ -340,7 +452,6 @@
             { id: "place-asmnl", name: "Assembly" },
             { id: "place-sullivan", name: "Sullivan Square" },
             { id: "place-community", name: "Community College" },
-            { id: "place-north", name: "North Station" },
             { id: "place-lech", name: "Lechmere" },
             { id: "place-science", name: "Science Park" },
             { id: "place-brntn", name: "Braintree" },
@@ -354,7 +465,6 @@
             { id: "place-asmnl", name: "Ashmont" }
         ];
 
-        // Populate the dropdown on page load
         window.onload = function() {
             const select = document.getElementById('stopSelect');
             stops.forEach(stop => {
@@ -370,11 +480,7 @@
         async function getTrainTimes() {
             const stopSelect = document.getElementById('stopSelect');
             const selectedStop = stopSelect.value;
-            
-            if (!selectedStop) {
-                showError('Please select a station first.');
-                return;
-            }
+            if (!selectedStop) { showError('Please select a station.'); return; }
 
             showLoading(true);
             hideError();
@@ -382,62 +488,30 @@
 
             try {
                 const response = await fetch(`/times/both/${selectedStop}/3`);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
                 const data = await response.json();
-                
-                if (data.status === "200") {
-                    displayResults(data.inbound, data.outbound);
-                } else {
-                    throw new Error(data.error || 'Failed to fetch train times');
-                }
-                
+                if (data.status === "200") displayResults(data.inbound, data.outbound);
+                else throw new Error(data.error || 'Failed to fetch times');
             } catch (error) {
-                console.error('Error:', error);
-                showError(`Failed to load train times: ${error.message}`);
+                showError(`Error: ${error.message}`);
             } finally {
                 showLoading(false);
             }
         }
 
-        // Reset train timings: clears display and refetches from /times/reset. Call this directly or use auto-refresh.
         async function resetTrainTimings() {
             const stopSelect = document.getElementById('stopSelect');
             const selectedStop = stopSelect.value;
-            
-            if (!selectedStop) {
-                showError('Please select a station first.');
-                return;
-            }
+            if (!selectedStop) { showError('Please select a station.'); return; }
 
             showLoading(true);
             hideError();
-            hideResults();
 
             try {
                 const response = await fetch(`/times/reset?stopId=${encodeURIComponent(selectedStop)}&nextnum=3`);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
                 const data = await response.json();
-                
-                if (data.status === "200" && data.inbound !== undefined) {
-                    displayResults(data.inbound, data.outbound);
-                } else if (data.status === "200") {
-                    // No stopId was sent; timings "reset" but no data returned
-                    hideResults();
-                } else {
-                    throw new Error(data.error || 'Failed to reset train times');
-                }
-                
+                if (data.status === "200" && data.inbound !== undefined) displayResults(data.inbound, data.outbound);
             } catch (error) {
-                console.error('Error:', error);
-                showError(`Failed to reset train times: ${error.message}`);
+                showError(`Error: ${error.message}`);
             } finally {
                 showLoading(false);
             }
@@ -445,26 +519,18 @@
 
         function startAutoRefresh() {
             const stopSelect = document.getElementById('stopSelect');
-            const selectedStop = stopSelect.value;
-            if (!selectedStop) {
-                showError('Please select a station first.');
-                return;
-            }
+            if (!stopSelect.value) { showError('Please select a station.'); return; }
             const seconds = parseInt(document.getElementById('refreshInterval').value, 10) || 30;
-            const ms = Math.max(10000, Math.min(300000, seconds * 1000)); // clamp 10s–300s
+            const ms = Math.max(10000, seconds * 1000);
             if (autoRefreshTimer) clearInterval(autoRefreshTimer);
             autoRefreshTimer = setInterval(resetTrainTimings, ms);
             document.getElementById('startRefreshBtn').style.display = 'none';
             document.getElementById('stopRefreshBtn').style.display = 'inline-block';
-            hideError();
-            resetTrainTimings(); // run once immediately
+            resetTrainTimings();
         }
 
         function stopAutoRefresh() {
-            if (autoRefreshTimer) {
-                clearInterval(autoRefreshTimer);
-                autoRefreshTimer = null;
-            }
+            if (autoRefreshTimer) { clearInterval(autoRefreshTimer); autoRefreshTimer = null; }
             document.getElementById('startRefreshBtn').style.display = 'inline-block';
             document.getElementById('stopRefreshBtn').style.display = 'none';
         }
@@ -472,84 +538,36 @@
         function displayResults(inbound, outbound) {
             const inboundList = document.getElementById('inboundList');
             const outboundList = document.getElementById('outboundList');
-            
-            // Clear previous results
             inboundList.innerHTML = '';
             outboundList.innerHTML = '';
             
-            // Display inbound trains
             if (inbound && inbound.length > 0) {
-                inbound.forEach(train => {
-                    const li = createTrainListItem(train);
-                    inboundList.appendChild(li);
-                });
-            } else {
-                inboundList.innerHTML = '<li class="no-trains">No inbound trains scheduled</li>';
-            }
+                inbound.forEach(train => inboundList.appendChild(createTrainListItem(train)));
+            } else inboundList.innerHTML = '<li class="no-trains">No inbound trains</li>';
             
-            // Display outbound trains
             if (outbound && outbound.length > 0) {
-                outbound.forEach(train => {
-                    const li = createTrainListItem(train);
-                    outboundList.appendChild(li);
-                });
-            } else {
-                outboundList.innerHTML = '<li class="no-trains">No outbound trains scheduled</li>';
-            }
+                outbound.forEach(train => outboundList.appendChild(createTrainListItem(train)));
+            } else outboundList.innerHTML = '<li class="no-trains">No outbound trains</li>';
             
-            showResults();
+            document.getElementById('results').style.display = 'grid';
         }
 
         function createTrainListItem(train) {
             const li = document.createElement('li');
             li.className = 'train-item';
-            
-            const time = document.createElement('div');
-            time.className = 'train-time';
-            time.textContent = train.time;
-            
-            const destination = document.createElement('div');
-            destination.className = 'train-destination';
-            destination.textContent = train.endStop ? `To: ${train.endStop}` : 'Destination not available';
-            
-            li.appendChild(time);
-            li.appendChild(destination);
-            
+            li.innerHTML = `<div class="train-time">${train.time}</div>
+                            <div class="train-destination">${train.endStop ? 'To: ' + train.endStop : 'Destination N/A'}</div>`;
             return li;
         }
 
-        function showLoading(show) {
-            const loading = document.getElementById('loading');
-            const btn = document.getElementById('getTrainsBtn');
-            
-            if (show) {
-                loading.style.display = 'block';
-                btn.disabled = true;
-                btn.textContent = 'Loading...';
-            } else {
-                loading.style.display = 'none';
-                btn.disabled = false;
-                btn.textContent = 'Get Train Times';
-            }
-        }
-
-        function showResults() {
-            document.getElementById('results').style.display = 'grid';
-        }
-
-        function hideResults() {
-            document.getElementById('results').style.display = 'none';
-        }
-
-        function showError(message) {
+        function showLoading(show) { document.getElementById('loading').style.display = show ? 'block' : 'none'; }
+        function hideResults() { document.getElementById('results').style.display = 'none'; }
+        function showError(msg) { 
             const error = document.getElementById('error');
-            error.textContent = message;
+            error.textContent = msg;
             error.style.display = 'block';
         }
-
-        function hideError() {
-            document.getElementById('error').style.display = 'none';
-        }
+        function hideError() { document.getElementById('error').style.display = 'none'; }
     </script>
 </body>
 </html>

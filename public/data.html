@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Points | MBTA-SDK</title>
+    <style>
+        :root {
+            --primary: #003da5;
+            --secondary: #7c878e;
+            --background: #f8f9fa;
+            --text: #212529;
+            --white: #ffffff;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--background);
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+        }
+
+        .search-box {
+            margin-bottom: 2rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: var(--radius);
+            font-size: 16px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        th.sortable {
+            cursor: pointer;
+            position: relative;
+            padding-right: 30px;
+        }
+
+        th.sortable:hover {
+            background-color: #e9ecef;
+        }
+
+        th.sortable::after {
+            content: '↕';
+            position: absolute;
+            right: 10px;
+            opacity: 0.5;
+        }
+
+        th.sort-asc::after {
+            content: '↑';
+            opacity: 1;
+        }
+
+        th.sort-desc::after {
+            content: '↓';
+            opacity: 1;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .badge-blue { background-color: #003da5; }
+        .badge-orange { background-color: #ed8b00; }
+        .badge-red { background-color: #da291c; }
+        .badge-green { background-color: #00843d; }
+        .badge-gray { background-color: #7c878e; }
+
+        #loading {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--primary);
+            color: white;
+            margin-top: 2rem;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="/" style="font-weight: bold; font-size: 1.2rem;">🚇 MBTA-SDK</a>
+        <div style="display: flex; gap: 1.5rem;">
+            <a href="/">Home</a>
+            <a href="/docs">Docs</a>
+            <a href="/data">Data Points</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1>MBTA Stop Data Points</h1>
+        <p>A comprehensive list of stops available through the MBTA-SDK. This data is statically served for performance.</p>
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search for a station, ID, or line..." onkeyup="filterTable()">
+        </div>
+
+        <div id="loading">Loading data...</div>
+
+        <div class="table-container" id="tableContainer" style="display: none;">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th class="sortable" onclick="sortTable(0, 'name')">Station Name</th>
+                        <th class="sortable" onclick="sortTable(1, 'line_short')">Place ID (Short Name)</th>
+                        <th class="sortable" onclick="sortTable(2, 'id')">Stop ID (Numeric)</th>
+                        <th class="sortable" onclick="sortTable(3, 'train_line')">Line</th>
+                        <th class="sortable" onclick="sortTable(4, 'municipality')">Municipality</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <!-- Data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 MBTA-SDK Project. Not affiliated with the MBTA.</p>
+    </footer>
+
+    <script>
+        let allData = [];
+        let currentSort = { column: null, direction: 'asc' };
+
+        async function fetchData() {
+            try {
+                // Fetching from the static JSON file
+                const response = await fetch('/stations.json');
+                const data = await response.json();
+                allData = data;
+
+                populateTable(allData);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('tableContainer').style.display = 'block';
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                document.getElementById('loading').innerHTML = '<p style="color: red;">Error loading data. Please try again later.</p>';
+            }
+        }
+
+        function populateTable(data) {
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+
+            data.forEach(stop => {
+                const row = document.createElement('tr');
+                
+                const nameCell = document.createElement('td');
+                nameCell.textContent = stop.name;
+                
+                const placeIdCell = document.createElement('td');
+                placeIdCell.innerHTML = `<code>${stop.line_short}</code>`;
+
+                const stopIdCell = document.createElement('td');
+                stopIdCell.innerHTML = stop.id ? `<code>${stop.id}</code>` : '<span style="color: #ccc; font-size: 0.8rem;">N/A</span>';
+                
+                const lineCell = document.createElement('td');
+                const lineBadge = document.createElement('span');
+                lineBadge.className = 'badge ' + getLineClass(stop.train_line);
+                lineBadge.textContent = stop.train_line;
+                lineCell.appendChild(lineBadge);
+
+                const muniCell = document.createElement('td');
+                muniCell.textContent = stop.municipality || 'N/A';
+
+                row.appendChild(nameCell);
+                row.appendChild(placeIdCell);
+                row.appendChild(stopIdCell);
+                row.appendChild(lineCell);
+                row.appendChild(muniCell);
+                
+                tableBody.appendChild(row);
+            });
+            
+            filterTable();
+        }
+
+        function sortTable(columnIndex, field) {
+            const headers = document.querySelectorAll('th.sortable');
+            
+            if (currentSort.column === columnIndex) {
+                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.column = columnIndex;
+                currentSort.direction = 'asc';
+            }
+
+            headers.forEach((h, i) => {
+                h.classList.remove('sort-asc', 'sort-desc');
+                if (i === columnIndex) {
+                    h.classList.add(currentSort.direction === 'asc' ? 'sort-asc' : 'sort-desc');
+                }
+            });
+
+            allData.sort((a, b) => {
+                let valA = String(a[field] || '').toLowerCase();
+                let valB = String(b[field] || '').toLowerCase();
+                
+                if (valA < valB) return currentSort.direction === 'asc' ? -1 : 1;
+                if (valA > valB) return currentSort.direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            populateTable(allData);
+        }
+
+        function getLineClass(line) {
+            if (!line) return 'badge-gray';
+            const l = line.toLowerCase();
+            if (l.includes('blue')) return 'badge-blue';
+            if (l.includes('orange')) return 'badge-orange';
+            if (l.includes('red')) return 'badge-red';
+            if (l.includes('green')) return 'badge-green';
+            return 'badge-gray';
+        }
+
+        function filterTable() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('dataTable');
+            const tr = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < tr.length; i++) {
+                let found = false;
+                const td = tr[i].getElementsByTagName('td');
+                for (let j = 0; j < td.length; j++) {
+                    if (td[j]) {
+                        const txtValue = td[j].textContent || td[j].innerText;
+                        if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                tr[i].style.display = found ? "" : "none";
+            }
+        }
+
+        window.onload = fetchData;
+    </script>
+</body>
+</html>
