@@ -12,7 +12,7 @@ import data from './obj/maindata.json' with { type: 'json' };
 const stopManager = new StopManager(stopdata.stops);
 const stopManager2 = new StopManager(data);
 
-console.log(stopManager2.getTrainHubs())
+// console.log(stopManager2.getTrainHubs())
 
 const asciiArt = `╔═════════════════════════════════════════════════════════════════╗
 ║                                                                 ║

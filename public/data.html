@@ -4,173 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Points | MBTA-SDK</title>
-    <style>
-        :root {
-            --primary: #003da5;
-            --secondary: #7c878e;
-            --background: #f8f9fa;
-            --text: #212529;
-            --white: #ffffff;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --radius: 8px;
-        }
-
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: var(--text);
-            background-color: var(--background);
-            margin: 0;
-            padding: 0;
-        }
-
-        nav {
-            background-color: var(--primary);
-            color: var(--white);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background: var(--white);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-        }
-
-        h1 {
-            color: var(--primary);
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 0.5rem;
-        }
-
-        .search-box {
-            margin-bottom: 2rem;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e1e5e9;
-            border-radius: var(--radius);
-            font-size: 16px;
-        }
-
-        .table-container {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-
-        th, td {
-            text-align: left;
-            padding: 12px 15px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #f2f2f2;
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        th.sortable {
-            cursor: pointer;
-            position: relative;
-            padding-right: 30px;
-        }
-
-        th.sortable:hover {
-            background-color: #e9ecef;
-        }
-
-        th.sortable::after {
-            content: '↕';
-            position: absolute;
-            right: 10px;
-            opacity: 0.5;
-        }
-
-        th.sort-asc::after {
-            content: '↑';
-            opacity: 1;
-        }
-
-        th.sort-desc::after {
-            content: '↓';
-            opacity: 1;
-        }
-
-        tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: white;
-        }
-
-        .badge-blue { background-color: #003da5; }
-        .badge-orange { background-color: #ed8b00; }
-        .badge-red { background-color: #da291c; }
-        .badge-green { background-color: #00843d; }
-        .badge-gray { background-color: #7c878e; }
-
-        #loading {
-            text-align: center;
-            padding: 2rem;
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem;
-            background-color: var(--primary);
-            color: white;
-            margin-top: 2rem;
-        }
-
-        code {
-            background: #f4f4f4;
-            padding: 2px 4px;
-            border-radius: 4px;
-            font-family: monospace;
-        }
-    </style>
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
 
     <nav>
-        <a href="/" style="font-weight: bold; font-size: 1.2rem;">🚇 MBTA-SDK</a>
-        <div style="display: flex; gap: 1.5rem;">
-            <a href="/">Home</a>
-            <a href="/docs">Docs</a>
-            <a href="/data">Data Points</a>
-        </div>
+        <a class="nav-logo" href="/">🚇 MBTA-SDK</a>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/docs">Docs</a></li>
+            <li><a href="/data">Data Points</a></li>
+        </ul>
     </nav>
 
-    <div class="container">
+    <div class="container container-wide">
         <h1>MBTA Stop Data Points</h1>
         <p>A comprehensive list of stops available through the MBTA-SDK. This data is statically served for performance.</p>
 
