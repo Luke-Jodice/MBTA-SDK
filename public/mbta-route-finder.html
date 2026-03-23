@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MBTA Route Finder</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --primary: #365959;
+    --secondary: #003052ff;
+    --accent: #a61c3cff;
+    --background: #f4f3f0;
+    --text: #1c1f23;
+    --white: #FFFFFB;
+    --shadow: 0 2px 8px rgba(27, 47, 94, 0.10);
+    --radius: 6px;
+
+    --red:    #da291c;
+    --orange: #ed8b00;
+    --blue:   #003da5;
+    --green:  #00843d;
+    --silver: #7c878e;
+  }
+
+  body {
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background: var(--background);
+    color: var(--text);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  nav {
+    flex-shrink: 0;
+  }
+
+  .main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 300px;
+    flex-shrink: 0;
+    background: var(--white);
+    border-right: 1px solid #e1e5e9;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 500;
+  }
+
+  .sidebar-inner {
+    padding: 1.25rem;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  label {
+    display: block;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--secondary);
+    margin-bottom: 5px;
+  }
+
+  select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid #d8d5cf;
+    border-radius: var(--radius);
+    background: var(--white);
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235c6b7a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+
+  select:focus { outline: none; border-color: var(--primary); }
+  select:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  .costs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .cost-field input {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid #d8d5cf;
+    border-radius: var(--radius);
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--white);
+    transition: border-color 0.15s;
+  }
+
+  .cost-field input:focus { outline: none; border-color: var(--primary); }
+
+  .btn {
+    width: 100%;
+    padding: 11px;
+    background: var(--primary);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+
+  .btn:hover { background: #243d7a; }
+  .btn:active { transform: scale(0.98); }
+  .btn:disabled { background: #9aadcc; cursor: not-allowed; }
+
+  .status {
+    font-size: 12px;
+    color: var(--secondary);
+    text-align: center;
+    min-height: 18px;
+  }
+
+  .status.error { color: var(--accent); }
+
+  /* ── Route result panel ── */
+  .result-panel {
+    border-top: 1px solid #e1e5e9;
+    padding: 1rem 1.25rem;
+    flex-shrink: 0;
+    max-height: 42vh;
+    overflow-y: auto;
+    display: none;
+  }
+
+  .result-panel.visible { display: block; }
+
+  .result-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .result-summary .stops-count {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--primary);
+  }
+
+  .result-summary .cost-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    background: #eef1f7;
+    color: var(--secondary);
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .stop-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .stop-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 5px 0;
+    position: relative;
+  }
+
+  .stop-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 9px;
+    top: 22px;
+    bottom: -5px;
+    width: 2px;
+    background: #e1e5e9;
+  }
+
+  .stop-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2.5px solid var(--white);
+    box-shadow: 0 0 0 2px currentColor;
+    flex-shrink: 0;
+    margin-top: 1px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stop-dot.terminal {
+    width: 22px;
+    height: 22px;
+  }
+
+  .stop-info { flex: 1; }
+
+  .stop-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .stop-line {
+    font-size: 11px;
+    color: var(--secondary);
+    margin-top: 1px;
+  }
+
+  .transfer-badge {
+    font-size: 10px;
+    font-weight: 500;
+    background: #fff3ee;
+    color: var(--accent);
+    border: 1px solid #f5cfc5;
+    padding: 1px 6px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-top: 2px;
+  }
+
+  /* ── Map ── */
+  #map {
+    flex: 1;
+    z-index: 1;
+  }
+
+  /* Custom Leaflet overrides */
+  .leaflet-popup-content-wrapper {
+    border-radius: var(--radius) !important;
+    box-shadow: var(--shadow) !important;
+    font-family: inherit !important;
+    font-size: 13px !important;
+  }
+
+  .leaflet-popup-tip { display: none; }
+
+  .loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(244,243,240,0.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    gap: 1rem;
+  }
+
+  .spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #d8d5cf;
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .loading-text {
+    font-size: 13px;
+    color: var(--secondary);
+    font-weight: 500;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .line-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 2px;
+  }
+
+  .line-pill {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--secondary);
+  }
+
+  .line-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .divider { height: 1px; background: #e1e5e9; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/">MBTA-SDK</a>
+  <ul class="nav-links">
+    <li><a href="/">Home</a></li>
+    <li><a href="/docs">Docs</a></li>
+    <li><a href="/data">Data Points</a></li>
+    <li><a href="/mbta-route-finder.html">Route Finder</a></li>
+  </ul>
+</nav>
+
+<div class="main" style="position:relative;">
+
+  <!-- Loading overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Fetching MBTA stop data…</div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-inner">
+
+      <div>
+        <label>Origin</label>
+        <select id="originSelect" disabled>
+          <option value="">Loading stops…</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Destination</label>
+        <select id="destSelect" disabled>
+          <option value="">Loading stops…</option>
+        </select>
+      </div>
+
+      <div class="divider"></div>
+
+      <div>
+        <label>Weights</label>
+        <div class="costs">
+          <div class="cost-field">
+            <label>Per stop</label>
+            <input type="number" id="stopCost" value="1" min="1" max="10">
+          </div>
+          <div class="cost-field">
+            <label>Transfer</label>
+            <input type="number" id="transferCost" value="5" min="0" max="20">
+          </div>
+        </div>
+      </div>
+
+      <button class="btn" id="findBtn" disabled>Find Route</button>
+      <div class="status" id="statusMsg"></div>
+
+      <div class="divider"></div>
+
+      <div>
+        <label>Lines</label>
+        <div class="line-legend">
+          <div class="line-pill"><div class="line-dot" style="background:var(--red)"></div>Red</div>
+          <div class="line-pill"><div class="line-dot" style="background:var(--orange)"></div>Orange</div>
+          <div class="line-pill"><div class="line-dot" style="background:var(--blue)"></div>Blue</div>
+          <div class="line-pill"><div class="line-dot" style="background:var(--green)"></div>Green</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Route result -->
+    <div class="result-panel" id="resultPanel">
+      <div class="result-summary">
+        <div>
+          <div style="font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--secondary);margin-bottom:2px;">Route</div>
+          <span class="stops-count" id="stopsCount">—</span>
+          <span style="font-size:13px;color:var(--secondary);"> stops</span>
+        </div>
+        <div class="cost-badge" id="costBadge">cost —</div>
+      </div>
+      <ul class="stop-list" id="stopList"></ul>
+    </div>
+  </div>
+
+  <!-- Map -->
+  <div id="map"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const MBTA_BASE = 'https://api-v3.mbta.com';
+const SUBWAY_ROUTES = ['Red','Orange','Blue','Green-B','Green-C','Green-D','Green-E'];
+
+const LINE_COLORS = {
+  'Red': '#da291c', 'Orange': '#ed8b00', 'Blue': '#003da5',
+  'Green-B': '#00843d', 'Green-C': '#00843d', 'Green-D': '#00843d', 'Green-E': '#00843d',
+};
+
+const LINE_NAMES = {
+  'Red': 'Red Line', 'Orange': 'Orange Line', 'Blue': 'Blue Line',
+  'Green-B': 'Green Line (B)', 'Green-C': 'Green Line (C)',
+  'Green-D': 'Green Line (D)', 'Green-E': 'Green Line (E)',
+};
+
+// State
+let graph = {};        // stopId -> [{neighborId, routeId}]
+let stopMeta = {};     // stopId -> {name, lat, lng, routes: Set}
+let routePolylines = {}; // routeId -> [[lat,lng],...]
+let allStopIds = [];
+
+// Map layers
+let map, routeLayers = [], pathLayer = null, markerLayer = null, stopDots = {};
+
+// ── Init map ──
+map = L.map('map', {
+  center: [42.358, -71.063],
+  zoom: 13,
+  zoomControl: true,
+}).addLayer(
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© CartoDB © OpenStreetMap',
+    maxZoom: 19,
+  })
+);
+
+// ── Fetch & build graph ──
+async function buildGraph() {
+  const fetches = SUBWAY_ROUTES.map(r =>
+    fetch(`${MBTA_BASE}/stops?filter[route]=${r}`)
+      .then(res => res.json())
+      .then(data => ({ routeId: r, stops: data.data }))
+  );
+
+  const results = await Promise.all(fetches);
+
+  for (const { routeId, stops } of results) {
+    const ids = [];
+    for (const stop of stops) {
+      const sid = stop.id;
+      const attr = stop.attributes;
+      if (!stopMeta[sid]) {
+        stopMeta[sid] = {
+          name: attr.name,
+          lat: attr.latitude,
+          lng: attr.longitude,
+          routes: new Set(),
+        };
+      }
+      stopMeta[sid].routes.add(routeId);
+      graph[sid] = graph[sid] || [];
+      ids.push(sid);
+    }
+
+    // Connect adjacent stops
+    for (let i = 0; i < ids.length; i++) {
+      if (i > 0) {
+        graph[ids[i]].push({ n: ids[i - 1], r: routeId });
+        graph[ids[i - 1]].push({ n: ids[i], r: routeId });
+      }
+    }
+
+    // Store polyline for this route
+    routePolylines[routeId] = ids
+      .map(id => stopMeta[id])
+      .filter(s => s && s.lat && s.lng)
+      .map(s => [s.lat, s.lng]);
+  }
+
+  // Deduplicate graph edges
+  for (const sid in graph) {
+    const seen = new Set();
+    graph[sid] = graph[sid].filter(e => {
+      const key = `${e.n}|${e.r}`;
+      if (seen.has(key)) return false;
+      seen.add(key); return true;
+    });
+  }
+
+  allStopIds = Object.keys(stopMeta);
+}
+
+// ── Draw all lines on map ──
+function drawLines() {
+  for (const [routeId, coords] of Object.entries(routePolylines)) {
+    const color = LINE_COLORS[routeId] || '#888';
+    const poly = L.polyline(coords, {
+      color, weight: 4, opacity: 0.35, lineJoin: 'round',
+    }).addTo(map);
+    routeLayers.push(poly);
+  }
+}
+
+// ── Draw stop dots ──
+function drawStopDots() {
+  for (const [sid, meta] of Object.entries(stopMeta)) {
+    if (!meta.lat || !meta.lng) continue;
+    const colors = [...meta.routes].map(r => LINE_COLORS[r] || '#888');
+    const color = colors[0];
+    const marker = L.circleMarker([meta.lat, meta.lng], {
+      radius: 4, color, fillColor: '#fff',
+      fillOpacity: 1, weight: 2, opacity: 0.7,
+    }).addTo(map);
+    marker.bindTooltip(meta.name, { direction: 'top', offset: [0, -6], opacity: 0.9 });
+    stopDots[sid] = marker;
+  }
+}
+
+// ── Populate selects ──
+function populateSelects() {
+  // Sort by name for usability
+  const sorted = allStopIds
+    .map(id => ({ id, name: stopMeta[id].name }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  const originSel = document.getElementById('originSelect');
+  const destSel = document.getElementById('destSelect');
+
+  originSel.innerHTML = '<option value="">Select origin…</option>';
+  destSel.innerHTML = '<option value="">Select destination…</option>';
+
+  for (const { id, name } of sorted) {
+    originSel.innerHTML += `<option value="${id}">${name}</option>`;
+    destSel.innerHTML += `<option value="${id}">${name}</option>`;
+  }
+
+  originSel.disabled = false;
+  destSel.disabled = false;
+  document.getElementById('findBtn').disabled = false;
+}
+
+// ── Dijkstra ──
+function dijkstra(startId, endId, stopCost, transferCost) {
+  // heap: [cost, stopId, arrivedRoute, path]
+  const heap = [[0, startId, null, [startId]]];
+  const visited = {};
+
+  while (heap.length > 0) {
+    heap.sort((a, b) => a[0] - b[0]);
+    const [cost, node, arrivedRoute, path] = heap.shift();
+
+    if (visited[node] !== undefined && visited[node] <= cost) continue;
+    visited[node] = cost;
+
+    if (node === endId) return { cost, path };
+
+    for (const { n: neighbor, r: edgeRoute } of (graph[node] || [])) {
+      let penalty = 0;
+      if (arrivedRoute !== null && edgeRoute !== arrivedRoute) {
+        const nodeRoutes = stopMeta[node]?.routes || new Set();
+        if (nodeRoutes.has(arrivedRoute) && nodeRoutes.has(edgeRoute)) {
+          penalty = transferCost;
+        }
+      }
+      heap.push([cost + stopCost + penalty, neighbor, edgeRoute, [...path, neighbor]]);
+    }
+  }
+  return null;
+}
+
+// ── Determine route used at each step ──
+function getRouteForStep(path, i) {
+  if (i >= path.length - 1) return null;
+  const cur = path[i], next = path[i + 1];
+  const shared = [...(stopMeta[cur]?.routes || [])].filter(r =>
+    stopMeta[next]?.routes?.has(r)
+  );
+  return shared[0] || null;
+}
+
+// ── Draw route on map ──
+function drawRoute(path) {
+  // Clear previous
+  if (pathLayer) { map.removeLayer(pathLayer); pathLayer = null; }
+  if (markerLayer) { map.removeLayer(markerLayer); markerLayer = null; }
+
+  // Dim all stop dots
+  for (const [sid, m] of Object.entries(stopDots)) {
+    m.setStyle({ opacity: 0.2, fillOpacity: 0.2 });
+  }
+
+  // Draw animated polyline segments by line color
+  const segments = [];
+  let curSegCoords = [];
+  let curRoute = getRouteForStep(path, 0);
+
+  for (let i = 0; i < path.length - 1; i++) {
+    const sid = path[i];
+    const route = getRouteForStep(path, i);
+    const meta = stopMeta[sid];
+    if (!meta) continue;
+
+    if (route !== curRoute && curSegCoords.length > 0) {
+      segments.push({ coords: curSegCoords, route: curRoute });
+      curSegCoords = [];
+      curRoute = route;
+    }
+
+    curSegCoords.push([meta.lat, meta.lng]);
+  }
+  // Last stop
+  const lastMeta = stopMeta[path[path.length - 1]];
+  if (lastMeta) curSegCoords.push([lastMeta.lat, lastMeta.lng]);
+  if (curSegCoords.length > 0) segments.push({ coords: curSegCoords, route: curRoute });
+
+  const allLayers = [];
+  for (const seg of segments) {
+    const color = LINE_COLORS[seg.route] || '#1b2f5e';
+    allLayers.push(L.polyline(seg.coords, {
+      color, weight: 6, opacity: 0.95, lineJoin: 'round', lineCap: 'round',
+    }));
+  }
+
+  // Stop markers on path
+  for (let i = 0; i < path.length; i++) {
+    const sid = path[i];
+    const meta = stopMeta[sid];
+    if (!meta) continue;
+    const isTerminal = i === 0 || i === path.length - 1;
+    const route = getRouteForStep(path, i) || getRouteForStep(path, i - 1);
+    const color = LINE_COLORS[route] || '#1b2f5e';
+
+    allLayers.push(L.circleMarker([meta.lat, meta.lng], {
+      radius: isTerminal ? 9 : 6,
+      color: color,
+      fillColor: isTerminal ? color : '#fff',
+      fillOpacity: 1,
+      weight: isTerminal ? 0 : 2.5,
+      opacity: 1,
+    }).bindTooltip(`<b>${meta.name}</b>`, { direction: 'top', offset: [0, -8] }));
+
+    // Brighten dot
+    if (stopDots[sid]) stopDots[sid].setStyle({ opacity: 0.8, fillOpacity: 0.8 });
+  }
+
+  pathLayer = L.layerGroup(allLayers).addTo(map);
+
+  // Fit bounds
+  const bounds = path
+    .map(id => stopMeta[id])
+    .filter(Boolean)
+    .map(m => [m.lat, m.lng]);
+  map.fitBounds(bounds, { padding: [60, 60] });
+}
+
+// ── Render sidebar result ──
+function renderResult(path, cost) {
+  const panel = document.getElementById('resultPanel');
+  panel.classList.add('visible');
+  document.getElementById('stopsCount').textContent = path.length - 1;
+  document.getElementById('costBadge').textContent = `cost ${cost}`;
+
+  const list = document.getElementById('stopList');
+  list.innerHTML = '';
+
+  let prevRoute = null;
+  for (let i = 0; i < path.length; i++) {
+    const sid = path[i];
+    const meta = stopMeta[sid];
+    const route = getRouteForStep(path, i) || getRouteForStep(path, i - 1);
+    const color = LINE_COLORS[route] || '#1b2f5e';
+    const isTerminal = i === 0 || i === path.length - 1;
+    const isTransfer = prevRoute && route && route !== prevRoute;
+
+    const li = document.createElement('li');
+    li.className = 'stop-item';
+    li.innerHTML = `
+      <div class="stop-dot ${isTerminal ? 'terminal' : ''}" style="color:${color};background:${isTerminal ? color : '#fff'}"></div>
+      <div class="stop-info">
+        <div class="stop-name">${meta?.name || sid}</div>
+        <div class="stop-line">${route ? LINE_NAMES[route] : ''}</div>
+        ${isTransfer ? `<span class="transfer-badge">Transfer</span>` : ''}
+      </div>
+    `;
+    list.appendChild(li);
+    if (route) prevRoute = route;
+  }
+}
+
+// ── Find route handler ──
+document.getElementById('findBtn').addEventListener('click', () => {
+  const originId = document.getElementById('originSelect').value;
+  const destId = document.getElementById('destSelect').value;
+  const stopCost = parseInt(document.getElementById('stopCost').value) || 1;
+  const transferCost = parseInt(document.getElementById('transferCost').value) ?? 5;
+  const status = document.getElementById('statusMsg');
+
+  if (!originId || !destId) {
+    status.textContent = 'Please select both origin and destination.';
+    status.className = 'status error';
+    return;
+  }
+  if (originId === destId) {
+    status.textContent = 'Origin and destination must be different.';
+    status.className = 'status error';
+    return;
+  }
+
+  status.textContent = 'Calculating…';
+  status.className = 'status';
+
+  setTimeout(() => {
+    const result = dijkstra(originId, destId, stopCost, transferCost);
+    if (!result) {
+      status.textContent = 'No route found between these stops.';
+      status.className = 'status error';
+      return;
+    }
+    status.textContent = '';
+    drawRoute(result.path);
+    renderResult(result.path, result.cost);
+  }, 10);
+});
+
+// ── Bootstrap ──
+(async () => {
+  try {
+    await buildGraph();
+    drawLines();
+    drawStopDots();
+    populateSelects();
+    document.getElementById('loadingOverlay').style.display = 'none';
+  } catch (e) {
+    document.querySelector('.loading-text').textContent = 'Failed to load MBTA data. Check your connection.';
+    console.error(e);
+  }
+})();
+</script>
+</body>
+</html>
