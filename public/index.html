@@ -271,6 +271,7 @@
               autocomplete="off"
               placeholder="email address"
             />
+          </div>
           <p class="modal-status" id="feedbackStatus" role="status"></p>
           <button type="submit" class="btn btn-submit" id="feedbackSubmitBtn">
             Submit
@@ -450,9 +451,12 @@
         document.getElementById("error").style.display = "none";
       }
 
-      /** Redirects to GitHub New Issue page with pre-filled fields */
+      /** Handles Feedback/Bug Report form submission using the feedback service */
 
       (function initFeedbackModal() {
+        const BASE_URL = "https://github-issue-pusher.vercel.app";
+        const REPO_NAME = "MBTA-SDK";
+
         const backdrop = document.getElementById("feedbackModalBackdrop");
         const modal = document.getElementById("feedbackModal");
         const openBtn = document.getElementById("openFeedbackBtn");
@@ -494,21 +498,20 @@
           
           const title = document.getElementById("feedbackTitle").value.trim();
           const type = document.getElementById("feedbackOption").value;
-          const typearray = [];
-          typearray.push(type);
           const description = document.getElementById("feedbackDescription").value.trim();
           const email = document.getElementById("feedbackEmail").value.trim();
           
+          const labels = [type];
           const payload = {
             title: title,
             body: `**Type:** ${type}\n\n**From**\n${email}\n\n**Description:**\n${description}`,
-            labels: typearray
+            labels: labels
           };
 
           submitBtn.disabled = true;
 
           try {
-            const res = await fetch("/feedback", {
+            const res = await fetch(`${BASE_URL}/feedback/${REPO_NAME}`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(payload),
@@ -519,7 +522,7 @@
             if (!contentType || !contentType.includes("application/json")) {
               const text = await res.text();
               console.error("Non-JSON Response:", text);
-              throw new Error("Backend not active. Please ensure /api/feedback.js is deployed and environment variables are set.");
+              throw new Error("Feedback service is currently unavailable. Please try again later.");
             }
 
             const data = await res.json();
