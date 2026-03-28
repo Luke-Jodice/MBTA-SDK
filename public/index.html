@@ -3,214 +3,228 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MBTA-SDK | Real-time MBTA Train Tracking API</title>
+    <title>MBTA-Middleware | Real-time MBTA Train Tracking API</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
-  <body>
+  <body class="has-sidebar">
     <nav>
-      <!-- <div class="logo">🚇 MBTA-SDK</div> -->
+      <div class="logo">MBTA-Middleware</div>
       <ul class="nav-links">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#features">Features</a></li>
-        <li><a href="#demo">Live Demo</a></li>
-        <li><a href="/docs">API Docs</a></li>
+        <li><a href="/">Home</a></li>
+        <li><a href="/docs">Docs</a></li>
         <li><a href="/data">Data Points</a></li>
         <li><a href="/routing">Find Routes</a></li>
       </ul>
     </nav>
 
-    <header id="home">
-      <div class="hero-content">
-        <h1>Real-time MBTA Data at Your Fingertips</h1>
-        <p>
-          A powerful, easy-to-use API wrapper for the Massachusetts Bay
-          Transportation Authority. Get train schedules, station data, and live
-          updates in seconds.
-        </p>
-        <div class="cta-buttons">
-          <a href="#demo" class="btn btn-primary">Try the Demo</a>
-          <a href="/docs" class="btn btn-outline">Read the Docs</a>
-        </div>
+    <aside class="page-anchor-sidebar collapsed" id="anchorSidebar">
+      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle Navigation Sidebar">
+        <span class="toggle-icon">☰</span>
+      </button>
+      <div class="sidebar-content">
+        <div class="sidebar-label">On This Page</div>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#demo">Live Demo</a></li>
+        </ul>
       </div>
-    </header>
+    </aside>
 
-    <section class="features" id="features">
-      <div class="section-title">
-        <h2>Why Use MBTA Middleware?</h2>
-      </div>
-      <div class="features-grid">
-        <div class="feature-card">
-          <span class="feature-icon"></span>
-          <h3>Real-time Tracking</h3>
+    <div class="main-content">
+      <header id="home">
+        <div class="hero-content">
+          <h1>Real-time MBTA Data at Your Fingertips</h1>
           <p>
-            Accurate, up-to-the-minute train schedules and arrival predictions
-            for all lines.
+            A powerful, easy-to-use API wrapper for the Massachusetts Bay
+            Transportation Authority. Get train schedules, station data, and live
+            updates in seconds.
           </p>
-        </div>
-        <div class="feature-card">
-          <span class="feature-icon"></span>
-          <h3>Station Search</h3>
-          <p>
-            Find stops by name, ID, or use geographical coordinates to find the
-            nearest station.
-          </p>
-        </div>
-        <div class="feature-card">
-          <span class="feature-icon"></span>
-          <h3>Full Coverage</h3>
-          <p>
-            Comprehensive data for Blue, Orange, Red, and Green lines, including
-            all stops and routes.
-          </p>
-        </div>
-        <div class="feature-card">
-          <span class="feature-icon"></span>
-          <h3>Developer First</h3>
-          <p>
-            Clean RESTful endpoints designed for seamless integration into your
-            next big project.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="demo-section" id="demo">
-      <div class="section-title">
-        <h2>Live Demo</h2>
-        <p>See the SDK in action with our real-time train tracker.</p>
-      </div>
-      <div class="demo-container">
-        <div class="demo-header">
-          <h3>Train Tracker</h3>
-        </div>
-        <div class="demo-content">
-          <div class="controls">
-            <div class="select-wrapper">
-              <label
-                for="stopSelect"
-                style="display: block; margin-bottom: 5px; font-weight: 600"
-                >Station:</label
-              >
-              <select id="stopSelect">
-                <option value="">Choose a station...</option>
-              </select>
-            </div>
-            <button
-              class="btn btn-demo"
-              id="getTrainsBtn"
-              onclick="getTrainTimes()"
-            >
-              Get Times
-            </button>
+          <div class="cta-buttons">
+            <a href="#demo" class="btn btn-primary">Try the Demo</a>
+            <a href="/docs" class="btn btn-outline">Read the Docs</a>
           </div>
+        </div>
+      </header>
 
-          <div class="controls">
-            <div style="flex: 1">
-              <label
-                for="refreshInterval"
-                style="display: block; margin-bottom: 5px; font-weight: 600"
-                >Auto-refresh (sec):</label
-              >
-              <input
-                type="number"
-                id="refreshInterval"
-                min="10"
-                max="300"
-                value="30"
-              />
-            </div>
-            <button
-              class="btn btn-secondary"
-              id="startRefreshBtn"
-              onclick="startAutoRefresh()"
-            >
-              Start Auto
-            </button>
-            <button
-              class="btn btn-secondary"
-              id="stopRefreshBtn"
-              onclick="stopAutoRefresh()"
-              style="display: none"
-            >
-              Stop Auto
-            </button>
-            <button class="btn btn-secondary" onclick="resetTrainTimings()">
-              Manual Reset
-            </button>
+      <section class="features" id="features">
+        <div class="section-title">
+          <h2>Why Use MBTA Middleware?</h2>
+        </div>
+        <div class="features-grid">
+          <div class="feature-card">
+            <span class="feature-icon"></span>
+            <h3>Real-time Tracking</h3>
+            <p>
+              Accurate, up-to-the-minute train schedules and arrival predictions
+              for all lines.
+            </p>
           </div>
+          <div class="feature-card">
+            <span class="feature-icon"></span>
+            <h3>Station Search</h3>
+            <p>
+              Find stops by name, ID, or use geographical coordinates to find the
+              nearest station.
+            </p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-icon"></span>
+            <h3>Full Coverage</h3>
+            <p>
+              Comprehensive data for Blue, Orange, Red, and Green lines, including
+              all stops and routes.
+            </p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-icon"></span>
+            <h3>Developer First</h3>
+            <p>
+              Clean RESTful endpoints designed for seamless integration into your
+              next big project.
+            </p>
+          </div>
+        </div>
+      </section>
 
-          <div
-            id="loading"
-            style="display: none; text-align: center; padding: 20px"
+      <section class="demo-section" id="demo">
+        <div class="section-title">
+          <h2>Live Demo</h2>
+          <p>See the SDK in action with our real-time train tracker.</p>
+        </div>
+        <div class="demo-container">
+          <div class="demo-header">
+            <h3>Train Tracker</h3>
+          </div>
+          <div class="demo-content">
+            <div class="controls">
+              <div class="select-wrapper">
+                <label
+                  for="stopSelect"
+                  style="display: block; margin-bottom: 5px; font-weight: 600"
+                  >Station:</label
+                >
+                <select id="stopSelect">
+                  <option value="">Choose a station...</option>
+                </select>
+              </div>
+              <button
+                class="btn btn-demo"
+                id="getTrainsBtn"
+                onclick="getTrainTimes()"
+              >
+                Get Times
+              </button>
+            </div>
+
+            <div class="controls">
+              <div style="flex: 1">
+                <label
+                  for="refreshInterval"
+                  style="display: block; margin-bottom: 5px; font-weight: 600"
+                  >Auto-refresh (sec):</label
+                >
+                <input
+                  type="number"
+                  id="refreshInterval"
+                  min="10"
+                  max="300"
+                  value="30"
+                />
+              </div>
+              <button
+                class="btn btn-secondary"
+                id="startRefreshBtn"
+                onclick="startAutoRefresh()"
+              >
+                Start Auto
+              </button>
+              <button
+                class="btn btn-secondary"
+                id="stopRefreshBtn"
+                onclick="stopAutoRefresh()"
+                style="display: none"
+              >
+                Stop Auto
+              </button>
+              <button class="btn btn-secondary" onclick="resetTrainTimings()">
+                Manual Reset
+              </button>
+            </div>
+
+            <div
+              id="loading"
+              style="display: none; text-align: center; padding: 20px"
+            >
+              <p>Loading...</p>
+            </div>
+
+            <div id="results" class="results" style="display: none">
+              <div class="direction-card inbound">
+                <h4>Inbound Trains</h4>
+                <ul id="inboundList" class="train-list"></ul>
+              </div>
+              <div class="direction-card outbound">
+                <h4>Outbound Trains</h4>
+                <ul id="outboundList" class="train-list"></ul>
+              </div>
+            </div>
+
+            <div
+              id="error"
+              style="
+                display: none;
+                color: var(--accent);
+                background: #fee;
+                padding: 10px;
+                border-radius: 5px;
+                margin-top: 10px;
+              "
+            ></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="quick-start">
+        <div class="section-title">
+          <h2>Quick Start</h2>
+          <p>Start fetching data in seconds.</p>
+        </div>
+        <div class="code-block">
+          curl
+          https://mbta-companion-app-middleware.vercel.app/times/both/place-sstat/3
+        </div>
+        <p style="margin-top: 1.5rem; text-align: center">
+          Check out the
+          <a href="/docs" style="color: var(--primary); font-weight: 600"
+            >Full Documentation</a
           >
-            <p>Loading...</p>
-          </div>
+          for more endpoints.
+        </p>
+      </section>
 
-          <div id="results" class="results" style="display: none">
-            <div class="direction-card inbound">
-              <h4>Inbound Trains</h4>
-              <ul id="inboundList" class="train-list"></ul>
-            </div>
-            <div class="direction-card outbound">
-              <h4>Outbound Trains</h4>
-              <ul id="outboundList" class="train-list"></ul>
-            </div>
-          </div>
-
-          <div
-            id="error"
-            style="
-              display: none;
-              color: var(--accent);
-              background: #fee;
-              padding: 10px;
-              border-radius: 5px;
-              margin-top: 10px;
-            "
-          ></div>
+      <footer>
+        <div class="footer-links">
+          <a href="#home">Home</a>
+          <a href="/docs">API Docs</a>
+          <a href="/data">Data Points</a>
+          <a href="/routing">Find Routes</a>
+          <a href="https://github.com/Luke-Jodice/MBTA-SDK">GitHub</a>
         </div>
-      </div>
-    </section>
-
-    <section class="quick-start">
-      <div class="section-title">
-        <h2>Quick Start</h2>
-        <p>Start fetching data in seconds.</p>
-      </div>
-      <div class="code-block">
-        curl
-        https://mbta-companion-app-middleware.vercel.app/times/both/place-sstat/3
-      </div>
-      <p style="margin-top: 1.5rem; text-align: center">
-        Check out the
-        <a href="/docs" style="color: var(--primary); font-weight: 600"
-          >Full Documentation</a
-        >
-        for more endpoints.
-      </p>
-    </section>
-
-    <footer>
-      <div class="footer-links">
-        <a href="#home">Home</a>
-        <a href="/docs">API Docs</a>
-        <a href="/data">Data Points</a>
-        <a href="/routing">Find Routes</a>
-        <a href="https://github.com/Luke-Jodice/MBTA-SDK">GitHub</a>
-      </div>
-      <div class="footer-actions">
-        <button
-          type="button"
-          class="btn-footer"
-          id="openFeedbackBtn"
-          aria-haspopup="dialog"
-          aria-controls="feedbackModal"
-        >
-          See a Bug?
-        </button>
-      </div>
-      <p>&copy; 2026 MBTA-SDK Project. Not affiliated with the MBTA.</p>
-    </footer>
+        <div class="footer-actions">
+          <button
+            type="button"
+            class="btn-footer"
+            id="openFeedbackBtn"
+            aria-haspopup="dialog"
+            aria-controls="feedbackModal"
+          >
+            See a Bug?
+          </button>
+        </div>
+        <p>&copy; 2026 MBTA-SDK Project. Not affiliated with the MBTA.</p>
+      </footer>
+    </div>
 
     <div class="modal-backdrop" id="feedbackModalBackdrop" aria-hidden="true">
       <div
@@ -541,6 +555,31 @@
             submitBtn.disabled = false;
           }
         });
+      })();
+
+      // Sidebar Toggle Logic
+      (function initSidebarToggle() {
+        const sidebar = document.getElementById("anchorSidebar");
+        const toggleBtn = document.getElementById("sidebarToggle");
+        const toggleIcon = toggleBtn.querySelector(".toggle-icon");
+
+        if (sidebar && toggleBtn) {
+          toggleBtn.addEventListener("click", () => {
+            const isCollapsed = sidebar.classList.toggle("collapsed");
+            toggleIcon.textContent = isCollapsed ? "☰" : "✕";
+            
+            // Optional: Close sidebar when a link is clicked
+            if (!isCollapsed) {
+              const links = sidebar.querySelectorAll("a");
+              links.forEach(link => {
+                link.addEventListener("click", () => {
+                  sidebar.classList.add("collapsed");
+                  toggleIcon.textContent = "☰";
+                }, { once: true });
+              });
+            }
+          });
+        }
       })();
     </script>
   </body>

@@ -63,6 +63,116 @@ nav {
     box-shadow: var(--shadow);
 }
 
+/* Page Anchor Sidebar (Index) */
+@media (min-width: 1024px) {
+    .page-anchor-sidebar {
+        position: fixed;
+        left: 2rem;
+        top: 25%;
+        transform: translateY(-50%);
+        z-index: 1100;
+        background: rgba(255, 255, 255, 0.4);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        padding: 0;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        width: 240px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+    }
+
+    .page-anchor-sidebar.collapsed {
+        width: 60px;
+        height: 60px;
+        border-radius: 30px;
+        padding: 0;
+    }
+
+    .sidebar-toggle {
+        width: 60px;
+        height: 60px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--primary);
+        font-size: 1.5rem;
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar-toggle:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .page-anchor-sidebar.collapsed .sidebar-toggle {
+        border-radius: 30px;
+    }
+
+    .sidebar-content {
+        padding: 0 1.5rem 2rem 1.5rem;
+        opacity: 1;
+        transition: opacity 0.3s ease 0.1s;
+    }
+
+    .page-anchor-sidebar.collapsed .sidebar-content {
+        opacity: 0;
+        pointer-events: none;
+        display: none;
+    }
+
+    .page-anchor-sidebar ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .page-anchor-sidebar a {
+        text-decoration: none;
+        color: var(--text);
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+        display: block;
+        padding: 0.5rem 0.75rem;
+        border-radius: 10px;
+        white-space: nowrap;
+    }
+
+    .page-anchor-sidebar a:hover {
+        background: rgba(255, 255, 255, 0.4);
+        color: var(--primary);
+        transform: translateX(5px);
+    }
+
+    .page-anchor-sidebar .sidebar-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--primary);
+        margin-bottom: 1.5rem;
+        font-weight: 800;
+        opacity: 0.6;
+    }
+
+    /* Allow main content to expand fully and flow underneath the fixed sidebar */
+    .has-sidebar .main-content {
+        width: 100%;
+        margin: 0;
+        max-width: none;
+    }
+}
+
+@media (max-width: 1023px) {
+    .page-anchor-sidebar {
+        display: none;
+    }
+}
+
 .nav-logo {
     grid-column: 1;
     justify-self: start;
