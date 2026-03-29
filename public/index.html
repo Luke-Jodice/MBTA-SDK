@@ -17,18 +17,28 @@
       </ul>
     </nav>
 
-    <aside class="page-anchor-sidebar collapsed" id="anchorSidebar">
-      <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle Navigation Sidebar">
-        <span class="toggle-icon">☰</span>
-      </button>
-      <div class="sidebar-content">
-        <div class="sidebar-label">On This Page</div>
-        <ul>
-          <li><a href="#home">Home</a></li>
-          <li><a href="#features">Features</a></li>
-          <li><a href="#demo">Live Demo</a></li>
-        </ul>
-      </div>
+    <aside class="scroll-spy-sidebar">
+      <div class="spy-track"></div>
+      <ul class="spy-list">
+        <li class="spy-item active" data-section="home">
+          <a href="#home">
+            <span class="spy-dot"></span>
+            <span class="spy-label">Home</span>
+          </a>
+        </li>
+        <li class="spy-item" data-section="features">
+          <a href="#features">
+            <span class="spy-dot"></span>
+            <span class="spy-label">Features</span>
+          </a>
+        </li>
+        <li class="spy-item" data-section="demo">
+          <a href="#demo">
+            <span class="spy-dot"></span>
+            <span class="spy-label">Live Demo</span>
+          </a>
+        </li>
+      </ul>
     </aside>
 
     <div class="main-content">
@@ -90,7 +100,7 @@
       <section class="demo-section" id="demo">
         <div class="section-title">
           <h2>Live Demo</h2>
-          <p>See the SDK in action with our real-time train tracker.</p>
+          <p>See a minimul usecase using the realtime data</p>
         </div>
         <div class="demo-container">
           <div class="demo-header">
@@ -557,29 +567,40 @@
         });
       })();
 
-      // Sidebar Toggle Logic
-      (function initSidebarToggle() {
-        const sidebar = document.getElementById("anchorSidebar");
-        const toggleBtn = document.getElementById("sidebarToggle");
-        const toggleIcon = toggleBtn.querySelector(".toggle-icon");
+      // Scroll Spy Logic
+      (function initScrollSpy() {
+        const spyItems = document.querySelectorAll(".spy-item");
+        const sections = document.querySelectorAll("header[id], section[id]");
+        
+        const options = {
+          root: null,
+          rootMargin: "-40% 0px -40% 0px", // Trigger when section is in middle of viewport
+          threshold: 0
+        };
 
-        if (sidebar && toggleBtn) {
-          toggleBtn.addEventListener("click", () => {
-            const isCollapsed = sidebar.classList.toggle("collapsed");
-            toggleIcon.textContent = isCollapsed ? "☰" : "✕";
-            
-            // Optional: Close sidebar when a link is clicked
-            if (!isCollapsed) {
-              const links = sidebar.querySelectorAll("a");
-              links.forEach(link => {
-                link.addEventListener("click", () => {
-                  sidebar.classList.add("collapsed");
-                  toggleIcon.textContent = "☰";
-                }, { once: true });
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const id = entry.target.getAttribute("id");
+              
+              // Update spy items
+              spyItems.forEach(item => {
+                item.classList.toggle("active", item.getAttribute("data-section") === id);
               });
             }
           });
-        }
+        }, options);
+
+        sections.forEach(section => observer.observe(section));
+
+        // Special case for scrolling to top
+        window.addEventListener("scroll", () => {
+          if (window.scrollY < 100) {
+            spyItems.forEach(item => {
+              item.classList.toggle("active", item.getAttribute("data-section") === "home");
+            });
+          }
+        });
       })();
     </script>
   </body>

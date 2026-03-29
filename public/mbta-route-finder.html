@@ -99,6 +99,57 @@
   select:focus { outline: none; border-color: var(--primary); }
   select:disabled { opacity: 0.45; cursor: not-allowed; }
 
+  /* ── Searchable Input ── */
+  .search-container {
+    position: relative;
+    width: 100%;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid #d8d5cf;
+    border-radius: var(--radius);
+    background: var(--white);
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--text);
+    transition: border-color 0.15s;
+  }
+
+  .search-input:focus { outline: none; border-color: var(--primary); }
+  .search-input:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  .search-results {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border: 1px solid #d8d5cf;
+    border-radius: var(--radius);
+    max-height: 240px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+    list-style: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  }
+
+  .search-results.visible { display: block; }
+
+  .search-item {
+    padding: 10px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background 0.1s;
+    border-bottom: 1px solid #f4f3f0;
+  }
+
+  .search-item:last-child { border-bottom: none; }
+  .search-item:hover { background: #f0f2f5; }
+  .search-item.selected { background: #eef1f7; font-weight: 600; }
+
   .costs {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -345,16 +396,20 @@
 
       <div>
         <label>Origin</label>
-        <select id="originSelect" disabled>
-          <option value="">Loading stops…</option>
-        </select>
+        <div class="search-container">
+          <input type="text" id="originInput" class="search-input" placeholder="Search origin..." disabled>
+          <ul id="originResults" class="search-results"></ul>
+          <input type="hidden" id="originId">
+        </div>
       </div>
 
       <div>
         <label>Destination</label>
-        <select id="destSelect" disabled>
-          <option value="">Loading stops…</option>
-        </select>
+        <div class="search-container">
+          <input type="text" id="destInput" class="search-input" placeholder="Search destination..." disabled>
+          <ul id="destResults" class="search-results"></ul>
+          <input type="hidden" id="destId">
+        </div>
       </div>
 
       <div class="divider"></div>
@@ -527,26 +582,53 @@ function drawStopDots() {
   }
 }
 
-// ── Populate selects ──
-function populateSelects() {
-  // Sort by name for usability
-  const sorted = allStopIds
+// ── Setup searchable dropdowns ──
+function setupSearchableDropdown(inputId, resultsId, hiddenId) {
+  const input = document.getElementById(inputId);
+  const results = document.getElementById(resultsId);
+  const hidden = document.getElementById(hiddenId);
+  
+  const stops = allStopIds
     .map(id => ({ id, name: stopMeta[id].name }))
     .sort((a, b) => a.name.localeCompare(b.name));
 
-  const originSel = document.getElementById('originSelect');
-  const destSel = document.getElementById('destSelect');
-
-  originSel.innerHTML = '<option value="">Select origin…</option>';
-  destSel.innerHTML = '<option value="">Select destination…</option>';
-
-  for (const { id, name } of sorted) {
-    originSel.innerHTML += `<option value="${id}">${name}</option>`;
-    destSel.innerHTML += `<option value="${id}">${name}</option>`;
+  function renderResults(filter = '') {
+    const filtered = stops.filter(s => 
+      s.name.toLowerCase().includes(filter.toLowerCase())
+    );
+    
+    results.innerHTML = filtered.length > 0 
+      ? filtered.map(s => `<li class="search-item" data-id="${s.id}">${s.name}</li>`).join('')
+      : '<li class="search-item" style="color:#888;cursor:default;">No stops found</li>';
+    
+    results.classList.add('visible');
   }
 
-  originSel.disabled = false;
-  destSel.disabled = false;
+  input.addEventListener('focus', () => renderResults(input.value));
+  input.addEventListener('input', () => renderResults(input.value));
+
+  results.addEventListener('click', (e) => {
+    const item = e.target.closest('.search-item');
+    if (!item || !item.dataset.id) return;
+    
+    input.value = item.textContent;
+    hidden.value = item.dataset.id;
+    results.classList.remove('visible');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest(`#${inputId}`) && !e.target.closest(`#${resultsId}`)) {
+      results.classList.remove('visible');
+    }
+  });
+
+  input.disabled = false;
+  input.placeholder = "Select stop...";
+}
+
+function initSearch() {
+  setupSearchableDropdown('originInput', 'originResults', 'originId');
+  setupSearchableDropdown('destInput', 'destResults', 'destId');
   document.getElementById('findBtn').disabled = false;
 }
 
@@ -612,6 +694,7 @@ function drawRoute(path) {
     if (!meta) continue;
 
     if (route !== curRoute && curSegCoords.length > 0) {
+      curSegCoords.push([meta.lat, meta.lng]);
       segments.push({ coords: curSegCoords, route: curRoute });
       curSegCoords = [];
       curRoute = route;
@@ -700,8 +783,8 @@ function renderResult(path, cost) {
 
 // ── Find route handler ──
 document.getElementById('findBtn').addEventListener('click', () => {
-  const originId = document.getElementById('originSelect').value;
-  const destId = document.getElementById('destSelect').value;
+  const originId = document.getElementById('originId').value;
+  const destId = document.getElementById('destId').value;
   const stopCost = parseInt(document.getElementById('stopCost').value) || 1;
   const transferCost = parseInt(document.getElementById('transferCost').value) ?? 5;
   const status = document.getElementById('statusMsg');
@@ -739,7 +822,7 @@ document.getElementById('findBtn').addEventListener('click', () => {
     await buildGraph();
     drawLines();
     drawStopDots();
-    populateSelects();
+    initSearch();
     document.getElementById('loadingOverlay').style.display = 'none';
   } catch (e) {
     document.querySelector('.loading-text').textContent = 'Failed to load MBTA data. Check your connection.';
