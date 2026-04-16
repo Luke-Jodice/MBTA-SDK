@@ -62,7 +62,6 @@
 
   .sidebar-inner {
     padding: 1.25rem;
-    flex: 1;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
@@ -202,7 +201,7 @@
     border-top: 1px solid #e1e5e9;
     padding: 1rem 1.25rem;
     flex-shrink: 0;
-    max-height: 42vh;
+    max-height: 52vh;
     overflow-y: auto;
     display: none;
   }
@@ -414,7 +413,7 @@
 
       <div class="divider"></div>
 
-      <div>
+      <!-- <div>
         <label>Weights</label>
         <div class="costs">
           <div class="cost-field">
@@ -426,13 +425,11 @@
             <input type="number" id="transferCost" value="5" min="0" max="20">
           </div>
         </div>
-      </div>
+      </div> -->
 
-      <button class="btn" id="findBtn" disabled>Find Route</button>
-      <div class="status" id="statusMsg"></div>
+      <button class="btn" id="findBtn" disabled>Find Route</button><div class="status" id="statusMsg"></div>
 
       <div class="divider"></div>
-
       <div>
         <label>Lines</label>
         <div class="line-legend">
@@ -785,8 +782,12 @@ function renderResult(path, cost) {
 document.getElementById('findBtn').addEventListener('click', () => {
   const originId = document.getElementById('originId').value;
   const destId = document.getElementById('destId').value;
-  const stopCost = parseInt(document.getElementById('stopCost').value) || 1;
-  const transferCost = parseInt(document.getElementById('transferCost').value) ?? 5;
+  // const stopCost = parseInt(document.getElementById('stopCost').value) || 1;
+  // const transferCost = parseInt(document.getElementById('transferCost').value) ?? 5;
+  
+  const stopCost = 1;
+  const transferCost = 5;
+  
   const status = document.getElementById('statusMsg');
 
   if (!originId || !destId) {
