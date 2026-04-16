@@ -100,97 +100,48 @@
       <section class="demo-section" id="demo">
         <div class="section-title">
           <h2>Live Demo</h2>
-          <p>See a minimul usecase using the realtime data</p>
+          <p>Real-time departures — updates automatically every 20 seconds</p>
         </div>
         <div class="demo-container">
           <div class="demo-header">
             <h3>Train Tracker</h3>
+            <div class="live-badge">
+              <span class="live-dot" id="liveDot"></span>
+              <span id="liveLabel">Disconnected</span>
+            </div>
           </div>
           <div class="demo-content">
-            <div class="controls">
+            <div class="demo-controls">
               <div class="select-wrapper">
-                <label
-                  for="stopSelect"
-                  style="display: block; margin-bottom: 5px; font-weight: 600"
-                  >Station:</label
-                >
+                <label for="stopSelect" style="display:block;margin-bottom:5px;font-weight:600">Station</label>
                 <select id="stopSelect">
                   <option value="">Choose a station...</option>
                 </select>
               </div>
-              <button
-                class="btn btn-demo"
-                id="getTrainsBtn"
-                onclick="getTrainTimes()"
-              >
-                Get Times
-              </button>
+              <button class="btn btn-demo" id="connectBtn" onclick="toggleStream()">Connect Live</button>
             </div>
 
-            <div class="controls">
-              <div style="flex: 1">
-                <label
-                  for="refreshInterval"
-                  style="display: block; margin-bottom: 5px; font-weight: 600"
-                  >Auto-refresh (sec):</label
-                >
-                <input
-                  type="number"
-                  id="refreshInterval"
-                  min="10"
-                  max="300"
-                  value="30"
-                />
+            <div id="demoLoading" style="display:none;text-align:center;padding:24px;color:#8b949e">
+              Connecting to live feed&hellip;
+            </div>
+
+            <div class="board" id="board" style="display:none">
+              <div class="board-col">
+                <div class="board-col-header inbound-header">&#8592; Inbound</div>
+                <div id="inboundRows" class="board-rows"></div>
               </div>
-              <button
-                class="btn btn-secondary"
-                id="startRefreshBtn"
-                onclick="startAutoRefresh()"
-              >
-                Start Auto
-              </button>
-              <button
-                class="btn btn-secondary"
-                id="stopRefreshBtn"
-                onclick="stopAutoRefresh()"
-                style="display: none"
-              >
-                Stop Auto
-              </button>
-              <button class="btn btn-secondary" onclick="resetTrainTimings()">
-                Manual Reset
-              </button>
-            </div>
-
-            <div
-              id="loading"
-              style="display: none; text-align: center; padding: 20px"
-            >
-              <p>Loading...</p>
-            </div>
-
-            <div id="results" class="results" style="display: none">
-              <div class="direction-card inbound">
-                <h4>Inbound Trains</h4>
-                <ul id="inboundList" class="train-list"></ul>
-              </div>
-              <div class="direction-card outbound">
-                <h4>Outbound Trains</h4>
-                <ul id="outboundList" class="train-list"></ul>
+              <div class="board-divider"></div>
+              <div class="board-col">
+                <div class="board-col-header outbound-header">Outbound &#8594;</div>
+                <div id="outboundRows" class="board-rows"></div>
               </div>
             </div>
 
-            <div
-              id="error"
-              style="
-                display: none;
-                color: var(--accent);
-                background: #fee;
-                padding: 10px;
-                border-radius: 5px;
-                margin-top: 10px;
-              "
-            ></div>
+            <div class="board-footer" id="boardFooter" style="display:none">
+              Updated <span id="lastUpdated">—</span>
+            </div>
+
+            <div id="demoError" class="demo-error" style="display:none"></div>
           </div>
         </div>
       </section>
@@ -305,175 +256,162 @@
     </div>
 
     <script>
-      // Existing logic maintained from original index.html
-      const stops = [
-        { id: "place-sstat", name: "South Station" },
-        { id: "place-north", name: "North Station" },
-        { id: "place-pktrm", name: "Park Street" },
-        { id: "place-dwnxg", name: "Downtown Crossing" },
-        { id: "place-state", name: "State Street" },
-        { id: "place-govt", name: "Government Center" },
-        { id: "place-haecl", name: "Haymarket" },
-        { id: "place-chill", name: "Charles/MGH" },
-        { id: "place-knncl", name: "Kendall/MIT" },
-        { id: "place-cntsq", name: "Central Square" },
-        { id: "place-harvd", name: "Harvard Square" },
-        { id: "place-porter", name: "Porter Square" },
-        { id: "place-davis", name: "Davis Square" },
-        { id: "place-asmnl", name: "Assembly" },
-        { id: "place-sullivan", name: "Sullivan Square" },
-        { id: "place-community", name: "Community College" },
-        { id: "place-lech", name: "Lechmere" },
-        { id: "place-science", name: "Science Park" },
-        { id: "place-brntn", name: "Braintree" },
-        { id: "place-qnctr", name: "Quincy Center" },
-        { id: "place-wollaston", name: "Wollaston" },
-        { id: "place-nqncy", name: "North Quincy" },
-        { id: "place-jfk", name: "JFK/UMass" },
-        { id: "place-shmnl", name: "Savin Hill" },
-        { id: "place-fldcr", name: "Fields Corner" },
-        { id: "place-shawmut", name: "Shawmut" },
-        { id: "place-asmnl", name: "Ashmont" },
-      ];
+      // ── Station loader ─────────────────────────────────────────────────────
+      async function loadStations() {
+        try {
+          const res = await fetch('/stations.json');
+          const stations = await res.json();
 
-      window.onload = function () {
-        const select = document.getElementById("stopSelect");
-        stops.forEach((stop) => {
-          const option = document.createElement("option");
-          option.value = stop.id;
-          option.textContent = stop.name;
-          select.appendChild(option);
+          // Group by train_line; skip entries without a place-xxx ID
+          const groups = {};
+          stations.forEach(s => {
+            if (!s.line_short) return;
+            if (!groups[s.train_line]) groups[s.train_line] = [];
+            groups[s.train_line].push(s);
+          });
+
+          const select = document.getElementById('stopSelect');
+          Object.keys(groups).sort().forEach(line => {
+            const group = document.createElement('optgroup');
+            group.label = line;
+            // Deduplicate by line_short within each group
+            const seen = new Set();
+            groups[line].forEach(s => {
+              if (seen.has(s.line_short)) return;
+              seen.add(s.line_short);
+              const opt = document.createElement('option');
+              opt.value = s.line_short;
+              opt.textContent = s.name;
+              group.appendChild(opt);
+            });
+            select.appendChild(group);
+          });
+        } catch (err) {
+          showDemoError('Could not load station list.');
+        }
+      }
+
+      // ── SSE live feed ──────────────────────────────────────────────────────
+      let eventSource = null;
+
+      function toggleStream() {
+        if (eventSource) {
+          disconnectStream();
+        } else {
+          connectStream();
+        }
+      }
+
+      function connectStream() {
+        const stopId = document.getElementById('stopSelect').value;
+        if (!stopId) { showDemoError('Please select a station.'); return; }
+
+        disconnectStream(); // close any prior connection
+        hideDemoError();
+
+        document.getElementById('demoLoading').style.display = 'block';
+        document.getElementById('board').style.display = 'none';
+        document.getElementById('boardFooter').style.display = 'none';
+        document.getElementById('connectBtn').textContent = 'Disconnect';
+
+        const url = `/times/stream?stopId=${encodeURIComponent(stopId)}&interval=20&nextnum=3`;
+        eventSource = new EventSource(url);
+
+        eventSource.addEventListener('times', (e) => {
+          const payload = JSON.parse(e.data);
+          document.getElementById('demoLoading').style.display = 'none';
+          renderBoard(payload.inbound, payload.outbound);
+          document.getElementById('lastUpdated').textContent =
+            new Date(payload.at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          document.getElementById('board').style.display = 'grid';
+          document.getElementById('boardFooter').style.display = 'block';
+          setLiveIndicator(true);
         });
-      };
 
-      let autoRefreshTimer = null;
+        eventSource.addEventListener('error', (e) => {
+          if (e.data) {
+            try { showDemoError(JSON.parse(e.data).error); } catch (_) {}
+          }
+        });
 
-      async function getTrainTimes() {
-        const stopSelect = document.getElementById("stopSelect");
-        const selectedStop = stopSelect.value;
-        if (!selectedStop) {
-          showError("Please select a station.");
+        eventSource.onerror = () => {
+          setLiveIndicator(false);
+          document.getElementById('connectBtn').textContent = 'Connect Live';
+          eventSource = null;
+        };
+      }
+
+      function disconnectStream() {
+        if (eventSource) { eventSource.close(); eventSource = null; }
+        setLiveIndicator(false);
+        document.getElementById('connectBtn').textContent = 'Connect Live';
+      }
+
+      function setLiveIndicator(active) {
+        document.getElementById('liveDot').classList.toggle('active', active);
+        document.getElementById('liveLabel').textContent = active ? 'Live' : 'Disconnected';
+      }
+
+      // Auto-connect when a station is chosen from the dropdown
+      document.getElementById('stopSelect').addEventListener('change', () => {
+        if (document.getElementById('stopSelect').value) {
+          connectStream();
+        } else {
+          disconnectStream();
+        }
+      });
+
+      // ── Departure board rendering ──────────────────────────────────────────
+      function minutesUntil(timeStr) {
+        if (!timeStr) return null;
+        const m = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
+        if (!m) return null;
+        let h = parseInt(m[1], 10);
+        const min = parseInt(m[2], 10);
+        const period = m[3].toUpperCase();
+        if (period === 'PM' && h !== 12) h += 12;
+        if (period === 'AM' && h === 12) h = 0;
+        const now = new Date();
+        const arrival = new Date(now);
+        arrival.setHours(h, min, 0, 0);
+        if (arrival < now) arrival.setDate(arrival.getDate() + 1);
+        return Math.round((arrival - now) / 60000);
+      }
+
+      function renderBoard(inbound, outbound) {
+        renderRows('inboundRows', inbound);
+        renderRows('outboundRows', outbound);
+      }
+
+      function renderRows(containerId, trains) {
+        const el = document.getElementById(containerId);
+        if (!trains || trains.length === 0) {
+          el.innerHTML = '<div class="board-no-trains">No trains scheduled</div>';
           return;
         }
-
-        showLoading(true);
-        hideError();
-        hideResults();
-
-        try {
-          const response = await fetch(`/times/both/${selectedStop}/3`);
-          const data = await response.json();
-          if (data.status === "200")
-            displayResults(data.inbound, data.outbound);
-          else throw new Error(data.error || "Failed to fetch times");
-        } catch (error) {
-          showError(`Error: ${error.message}`);
-        } finally {
-          showLoading(false);
-        }
+        el.innerHTML = trains.map(t => {
+          const mins = minutesUntil(t.time);
+          const minLabel = mins === null ? '' : mins <= 1 ? 'Now' : `${mins} min`;
+          const soon = mins !== null && mins <= 5;
+          return `<div class="board-row">
+            <span class="board-time">${t.time || '—'}</span>
+            <span class="board-dest">${t.endStop ? 'to ' + t.endStop : ''}</span>
+            <span class="board-min${soon ? ' soon' : ''}">${minLabel}</span>
+          </div>`;
+        }).join('');
       }
 
-      async function resetTrainTimings() {
-        const stopSelect = document.getElementById("stopSelect");
-        const selectedStop = stopSelect.value;
-        if (!selectedStop) {
-          showError("Please select a station.");
-          return;
-        }
-
-        showLoading(true);
-        hideError();
-
-        try {
-          const response = await fetch(
-            `/times/reset?stopId=${encodeURIComponent(selectedStop)}&nextnum=3`,
-          );
-          const data = await response.json();
-          if (data.status === "200" && data.inbound !== undefined)
-            displayResults(data.inbound, data.outbound);
-        } catch (error) {
-          showError(`Error: ${error.message}`);
-        } finally {
-          showLoading(false);
-        }
+      function showDemoError(msg) {
+        const el = document.getElementById('demoError');
+        el.textContent = msg;
+        el.style.display = 'block';
       }
 
-      function startAutoRefresh() {
-        const stopSelect = document.getElementById("stopSelect");
-        if (!stopSelect.value) {
-          showError("Please select a station.");
-          return;
-        }
-        const seconds =
-          parseInt(document.getElementById("refreshInterval").value, 10) || 30;
-        const ms = Math.max(10000, seconds * 1000);
-        if (autoRefreshTimer) clearInterval(autoRefreshTimer);
-        autoRefreshTimer = setInterval(resetTrainTimings, ms);
-        document.getElementById("startRefreshBtn").style.display = "none";
-        document.getElementById("stopRefreshBtn").style.display =
-          "inline-block";
-        resetTrainTimings();
+      function hideDemoError() {
+        document.getElementById('demoError').style.display = 'none';
       }
 
-      function stopAutoRefresh() {
-        if (autoRefreshTimer) {
-          clearInterval(autoRefreshTimer);
-          autoRefreshTimer = null;
-        }
-        document.getElementById("startRefreshBtn").style.display =
-          "inline-block";
-        document.getElementById("stopRefreshBtn").style.display = "none";
-      }
-
-      function displayResults(inbound, outbound) {
-        const inboundList = document.getElementById("inboundList");
-        const outboundList = document.getElementById("outboundList");
-        inboundList.innerHTML = "";
-        outboundList.innerHTML = "";
-
-        if (inbound && inbound.length > 0) {
-          inbound.forEach((train) =>
-            inboundList.appendChild(createTrainListItem(train)),
-          );
-        } else
-          inboundList.innerHTML =
-            '<li class="no-trains">No inbound trains</li>';
-
-        if (outbound && outbound.length > 0) {
-          outbound.forEach((train) =>
-            outboundList.appendChild(createTrainListItem(train)),
-          );
-        } else
-          outboundList.innerHTML =
-            '<li class="no-trains">No outbound trains</li>';
-
-        document.getElementById("results").style.display = "grid";
-      }
-
-      function createTrainListItem(train) {
-        const li = document.createElement("li");
-        li.className = "train-item";
-        li.innerHTML = `<div class="train-time">${train.time}</div>
-                            <div class="train-destination">${train.endStop ? "To: " + train.endStop : "Destination N/A"}</div>`;
-        return li;
-      }
-
-      function showLoading(show) {
-        document.getElementById("loading").style.display = show
-          ? "block"
-          : "none";
-      }
-      function hideResults() {
-        document.getElementById("results").style.display = "none";
-      }
-      function showError(msg) {
-        const error = document.getElementById("error");
-        error.textContent = msg;
-        error.style.display = "block";
-      }
-      function hideError() {
-        document.getElementById("error").style.display = "none";
-      }
+      window.addEventListener('DOMContentLoaded', loadStations);
 
       /** Handles Feedback/Bug Report form submission using the feedback service */
 
