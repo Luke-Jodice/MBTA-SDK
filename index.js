@@ -3,6 +3,7 @@ import { streamSSE } from 'hono/streaming';
 import { serveStatic } from '@hono/node-server/serve-static';
 import { StopManager } from './obj/stopmanager.js';
 import { getNextThree } from './livedata.js';
+import { dijkstra } from './scripts/Dijkstras.js';
 
 //
 //Load data//
@@ -11,6 +12,33 @@ import stopdata from './obj/orgstops-e.json' with { type: 'json' };
 import data from './obj/maindata.json' with { type: 'json' };
 const stopManager = new StopManager(stopdata.stops);
 const stopManager2 = new StopManager(data);
+
+// Build graph for Dijkstra's route finding
+function buildGraph(stops) {
+  const graph = {};
+  const stop_routes = {};
+  stops.forEach(stop => {
+    const { name, train_line } = stop;
+    if (!graph[name]) graph[name] = [];
+    if (!stop_routes[name]) stop_routes[name] = new Set();
+    stop_routes[name].add(train_line);
+    [...(stop.next_stop || []), ...(stop.previous_stop || [])].forEach(neighbor => {
+      if (neighbor && neighbor.trim() !== '') {
+        graph[name].push({ neighbor_id: neighbor, route_id: train_line });
+      }
+    });
+  });
+  return { graph, stop_routes };
+}
+const { graph, stop_routes } = buildGraph(data);
+
+function haversineKm(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
 
 // console.log(stopManager2.getTrainHubs())
 
@@ -137,26 +165,21 @@ app.get('/train/closest/:lat/:long', (c) => {
   const lat = parseFloat(c.req.param('lat'));
   const long = parseFloat(c.req.param('long'));
   
-  // Simple distance calculation (you can improve this)
   let closestStop = null;
   let minDistance = Infinity;
-  
+
   stopManager.getAllStops().forEach(stop => {
-    const distance = Math.sqrt(
-      Math.pow(stop.latitude - lat, 2) + 
-      Math.pow(stop.longitude - long, 2)
-    );
-    
+    const distance = haversineKm(lat, long, stop.latitude, stop.longitude);
     if (distance < minDistance) {
       minDistance = distance;
       closestStop = stop;
     }
   });
-  
+
   return c.json({
     status: "200",
-    closestStop: closestStop,
-    distance: minDistance
+    closestStop,
+    distanceKm: parseFloat(minDistance.toFixed(3))
   });
 });
 
@@ -218,25 +241,45 @@ app.get('/line/:name', (c) => {
 
 app.get('/stop/next/:stop', (c) =>{
   const curstop = c.req.param('stop');
-  const stop = data.filter(obj => obj.name === curstop);
-  const nextStopData = data.find(obj => obj.name === stop.next_stop);
+  const stop = data.find(obj => obj.name === curstop);
 
-  const resp ={
-    currstop : stop,
-    nextstop: nextStopData
+  if (!stop) {
+    return c.json({ status: "404", message: "Stop not found" }, 404);
   }
-  console.log(resp)
+
+  const nextStopData = data.find(obj => obj.name === stop.next_stop);
 
   return c.json({
     status: "200",
-    resp:resp
+    currstop: stop,
+    nextstop: nextStopData || null
   });
 
 });
 
 
 //Train Route
-app.get('/route/:start/:end', (c) =>{
+app.get('/route/:start/:end', (c) => {
+  const start = decodeURIComponent(c.req.param('start'));
+  const end = decodeURIComponent(c.req.param('end'));
+
+  if (!graph[start]) return c.json({ status: "404", message: `Start stop "${start}" not found` }, 404);
+  if (!graph[end]) return c.json({ status: "404", message: `End stop "${end}" not found` }, 404);
+
+  const { cost, path } = dijkstra(graph, stop_routes, start, end);
+
+  if (cost === Infinity) {
+    return c.json({ status: "404", message: "No route found between stops" }, 404);
+  }
+
+  return c.json({
+    status: "200",
+    start,
+    end,
+    cost,
+    stops: path.length,
+    path
+  });
 });
 
 //

@@ -4,27 +4,35 @@ class StopManager {
         this.stops = stopsData;
         this.stopsByName = new Map();
         this.stopsByLine = new Map();
-        
+        this.stopsById = new Map();
+
         this.buildIndexes();
     }
-    
+
     buildIndexes() {
         this.stops.forEach(stop => {
-            
+
             // Index by name (can have multiple stops with same name on different lines)
             if (!this.stopsByName.has(stop.name)) {
                 this.stopsByName.set(stop.name, []);
             }
             this.stopsByName.get(stop.name).push(stop);
-            
+
             // Index by train line
             if (!this.stopsByLine.has(stop.train_line)) {
                 this.stopsByLine.set(stop.train_line, []);
             }
             this.stopsByLine.get(stop.train_line).push(stop);
+
+            // Index by id
+            if (stop.id) this.stopsById.set(stop.id, stop);
         });
     }
     
+    getById(id) {
+        return this.stopsById.get(id) || null;
+    }
+
     // Get all stops with a specific name
     getByName(name) {
         return this.stopsByName.get(name);
