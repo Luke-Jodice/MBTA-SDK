@@ -48,11 +48,19 @@
 }</code></pre>
 
       <p class="path"><code>GET /train/closest/:lat/:long</code></p>
-      <p>Finds the stop closest to the given latitude and longitude. Returns stop details and distance.</p>
+      <p>Finds the stop closest to the given latitude and longitude using the Haversine formula. Returns stop details and distance in kilometers.</p>
       <pre><code>{
   "status": "200",
   "closestStop": { "id": "70041", "name": "State", "line": "Blue Line" },
-  "distance": 0.0023
+  "distanceKm": 0.412
+}</code></pre>
+
+      <p class="path"><code>GET /stop/next/:stop</code></p>
+      <p>Returns the current stop and the next stop in sequence, looked up by stop name.</p>
+      <pre><code>{
+  "status": "200",
+  "currstop": { "name": "Alewife", "train_line": "Red Line" },
+  "nextstop": { "name": "Davis", "train_line": "Red Line" }
 }</code></pre>
     </section>
 
@@ -69,7 +77,15 @@
 }</code></pre>
 
       <p class="path"><code>GET /route/:start/:end</code></p>
-      <p>Intended to return route information between two stops (currently not implemented).</p>
+      <p>Returns the optimal route between two stops by name using Dijkstra's algorithm. Transfer penalties are applied when switching lines. URL-encode stop names that contain spaces.</p>
+      <pre><code>{
+  "status": "200",
+  "start": "Alewife",
+  "end": "Park Street",
+  "cost": 7,
+  "stops": 8,
+  "path": ["Alewife", "Davis", "Porter", "Harvard", "Central", "Kendall/MIT", "Charles/MGH", "Park Street"]
+}</code></pre>
     </section>
 
     <section>
