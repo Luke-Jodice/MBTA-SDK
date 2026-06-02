@@ -179,47 +179,41 @@ app.get('/train/closest/:lat/:long', (c) => {
   });
 });
 
-// app.post('/feedback', async (c) => {
-//   try {
-//     const { title, body, labels } = await c.req.json();
-    
-//     // Get API Key from Environment Variables (Securely)
-//     const token = process.env.GITHUB_API_KEY;
+app.post('/feedback', async (c) => {
+  try {
+    const { title, body, labels } = await c.req.json();
 
-//     if (!token) {
-//       console.error("Missing GITHUB_API_KEY environment variable");
-//       return c.json({ error: 'Server configuration error: Missing API Key' }, 500);
-//     }
+    const token = process.env.GITHUB_API_KEY;
+    if (!token) {
+      return c.json({ error: 'Feedback is not configured on this server.' }, 500);
+    }
 
-//     const response = await fetch('https://api.github.com/repos/Luke-Jodice/MBTA-SDK/issues', {
-//       method: 'POST',
-//       headers: {
-//         'Authorization': `Bearer ${token}`,
-//         'Accept': 'application/vnd.github+json',
-//         'X-GitHub-Api-Version': '2022-11-28',
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({ 
-//         title: title || 'No Title Provided', 
-//         body: body || 'No Description Provided', 
-//         labels: labels || ["Bug/Feat"] 
-//       }),
-//     });
+    const response = await fetch('https://api.github.com/repos/Luke-Jodice/MBTA-SDK/issues', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title: title || 'No Title Provided',
+        body: body || 'No Description Provided',
+        labels: labels || ['Bug/Feat'],
+      }),
+    });
 
-//     const data = await response.json();
+    const data = await response.json();
+    if (!response.ok) {
+      return c.json({ error: data.message || 'GitHub API Error' }, response.status);
+    }
 
-//     if (!response.ok) {
-//       console.error("GitHub API Error:", data);
-//       return c.json({ error: data.message || 'GitHub API Error' }, response.status);
-//     }
-
-//     // Return success to the frontend
-//     return c.json({ status: 'success' }, 200);
-//   } catch (err) {
-//     console.error("Feedback Error:", err);
-//     return c.json({ error: 'Failed to process feedback' }, 500);
-//   }
-// });
+    return c.json({ status: 'success' }, 200);
+  } catch (err) {
+    console.error('Feedback Error:', err);
+    return c.json({ error: 'Failed to process feedback' }, 500);
+  }
+});
 
 //Lines
 //get all stops on line info by name

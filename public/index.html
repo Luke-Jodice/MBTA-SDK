@@ -430,8 +430,7 @@
       /** Handles Feedback/Bug Report form submission using the feedback service */
 
       (function initFeedbackModal() {
-        const BASE_URL = "https://github-issue-pusher.vercel.app";
-        const REPO_NAME = "MBTA-SDK";
+        const BASE_URL = "";
 
         const backdrop = document.getElementById("feedbackModalBackdrop");
         const modal = document.getElementById("feedbackModal");
@@ -487,7 +486,7 @@
           submitBtn.disabled = true;
 
           try {
-            const res = await fetch(`${BASE_URL}/feedback/${REPO_NAME}`, {
+            const res = await fetch(`${BASE_URL}/feedback`, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(payload),
