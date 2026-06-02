@@ -330,13 +330,27 @@
 
         eventSource.addEventListener('error', (e) => {
           if (e.data) {
-            try { showDemoError(JSON.parse(e.data).error); } catch (_) {}
+            try {
+              const err = JSON.parse(e.data).error || 'Unknown error';
+              showDemoError(err);
+            } catch (_) {}
           }
         });
 
-        eventSource.onerror = () => {
+        eventSource.onerror = (e) => {
           setLiveIndicator(false);
           document.getElementById('connectBtn').textContent = 'Connect Live';
+          // Classify the error based on the HTTP status when available
+          const status = e?.target?.status ?? 0;
+          if (status === 401 || status === 403) {
+            showDemoError('API key not configured — set MBTA_API_KEY on the server.');
+          } else if (status === 404) {
+            showDemoError('Stop ID not found — check the selected station.');
+          } else if (status >= 500) {
+            showDemoError('Server error — the stream will reconnect automatically.');
+          } else {
+            showDemoError('Connection lost — check your network and try reconnecting.');
+          }
           eventSource = null;
         };
       }

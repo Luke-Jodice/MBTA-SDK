@@ -37,6 +37,7 @@
                         <th class="sortable" onclick="sortTable(2, 'id')">Stop ID (Numeric)</th>
                         <th class="sortable" onclick="sortTable(3, 'train_line')">Line</th>
                         <th class="sortable" onclick="sortTable(4, 'municipality')">Municipality</th>
+                        <th class="sortable" onclick="sortTable(5, 'wheelchair_boarding')">Accessible</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody">
@@ -95,12 +96,18 @@
                 const muniCell = document.createElement('td');
                 muniCell.textContent = stop.municipality || 'N/A';
 
+                const accessCell = document.createElement('td');
+                accessCell.textContent = stop.wheelchair_boarding === 1 ? '✓' : '✗';
+                accessCell.style.textAlign = 'center';
+                accessCell.style.color = stop.wheelchair_boarding === 1 ? '#00843d' : '#aaa';
+
                 row.appendChild(nameCell);
                 row.appendChild(placeIdCell);
                 row.appendChild(stopIdCell);
                 row.appendChild(lineCell);
                 row.appendChild(muniCell);
-                
+                row.appendChild(accessCell);
+
                 tableBody.appendChild(row);
             });
             

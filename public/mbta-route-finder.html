@@ -463,17 +463,19 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 const MBTA_BASE = 'https://api-v3.mbta.com';
-const SUBWAY_ROUTES = ['Red','Orange','Blue','Green-B','Green-C','Green-D','Green-E'];
+const SUBWAY_ROUTES = ['Red','Orange','Blue','Green-B','Green-C','Green-D','Green-E','Silver','Mattapan'];
 
 const LINE_COLORS = {
   'Red': '#da291c', 'Orange': '#ed8b00', 'Blue': '#003da5',
   'Green-B': '#00843d', 'Green-C': '#00843d', 'Green-D': '#00843d', 'Green-E': '#00843d',
+  'Silver': '#7c878e', 'Mattapan': '#da291c',
 };
 
 const LINE_NAMES = {
   'Red': 'Red Line', 'Orange': 'Orange Line', 'Blue': 'Blue Line',
   'Green-B': 'Green Line (B)', 'Green-C': 'Green Line (C)',
   'Green-D': 'Green Line (D)', 'Green-E': 'Green Line (E)',
+  'Silver': 'Silver Line', 'Mattapan': 'Mattapan Trolley',
 };
 
 // State

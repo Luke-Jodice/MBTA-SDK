@@ -68,15 +68,13 @@ class StopManager {
         return results;
     }
     
-    // // Get transfer stations (stops that connect to other lines)
-    // getTransferStations() {
-    //     return this.stops.filter(stop => stop.is_transfer_station);
-    // }
-    
-    // // Get stops with wheelchair access
-    // getWheelchairAccessible() {
-    //     return this.stops.filter(stop => stop.wheelchair_boarding === 1);
-    // }
+    getTransferStations() {
+        return this.stops.filter(stop => stop.is_transfer_station);
+    }
+
+    getWheelchairAccessible() {
+        return this.stops.filter(stop => stop.wheelchair_boarding === 1);
+    }
 
     //returns true if has multiple stops before and after
     getTrainHubs()

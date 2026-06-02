@@ -23,9 +23,10 @@
 
     <ul class="api-nav">
       <li><a href="#train-info">Train Information</a></li>
+      <li><a href="#stops">Stops</a></li>
       <li><a href="#lines">Lines</a></li>
-      <!-- <li><a href="#static">Static Data</a></li> -->
       <li><a href="#live">Live Data</a></li>
+      <li><a href="#streaming">Streaming</a></li>
     </ul>
 
     <section>
@@ -36,22 +37,21 @@
       <pre><code>{
   "status": "200",
   "train": "State",
-  "stops": [ { "id": "70041", "name": "State", "line": "Blue Line" } ],
-  "count": 1
+  "stops": [ { "name": "State", "train_line": "Blue Line", "line_short": "place-state" } ]
 }</code></pre>
 
       <p class="path"><code>GET /train/id/:id</code></p>
-      <p>Returns stop details for a specific stop ID.</p>
+      <p>Returns stop details for a specific place ID (e.g. <code>place-sstat</code>).</p>
       <pre><code>{
   "status": "200",
-  "stop": { "id": "70041", "name": "State", "line": "Blue Line" }
+  "stop": { "name": "South Station", "train_line": "Red Line", "line_short": "place-sstat" }
 }</code></pre>
 
       <p class="path"><code>GET /train/closest/:lat/:long</code></p>
       <p>Finds the stop closest to the given latitude and longitude using the Haversine formula. Returns stop details and distance in kilometers.</p>
       <pre><code>{
   "status": "200",
-  "closestStop": { "id": "70041", "name": "State", "line": "Blue Line" },
+  "closestStop": { "name": "State", "train_line": "Blue Line" },
   "distanceKm": 0.412
 }</code></pre>
 
@@ -65,6 +65,30 @@
     </section>
 
     <section>
+      <h2 id="stops">Stops</h2>
+
+      <p class="path"><code>GET /stops/search?q=</code></p>
+      <p>Fuzzy search stops by partial name. Returns all stops whose name contains the query string (case-insensitive).</p>
+      <pre><code>{
+  "status": "200",
+  "query": "park",
+  "count": 2,
+  "results": [
+    { "name": "Park Street", "train_line": "Green/Red Line" },
+    { "name": "Alewife", "train_line": "Red Line" }
+  ]
+}</code></pre>
+
+      <p class="path"><code>GET /stops/accessible</code></p>
+      <p>Returns all stops with full wheelchair accessibility (<code>wheelchair_boarding = 1</code>).</p>
+      <pre><code>{
+  "status": "200",
+  "count": 52,
+  "stops": [ { "name": "Alewife", "train_line": "Red Line", "wheelchair_boarding": 1 } ]
+}</code></pre>
+    </section>
+
+    <section>
       <h2 id="lines">Lines</h2>
 
       <p class="path"><code>GET /line/:name</code></p>
@@ -72,8 +96,8 @@
       <pre><code>{
   "status": "200",
   "line": "Blue Line",
-  "stops": [ { "id": "70041", "name": "State" }, { "id": "70042", "name": "Airport" } ],
-  "count": 2
+  "stops": [ { "name": "State" }, { "name": "Airport" } ],
+  "count": 12
 }</code></pre>
 
       <p class="path"><code>GET /route/:start/:end</code></p>
@@ -89,50 +113,69 @@
     </section>
 
     <section>
-      <!-- <h2 id="static">Static Data</h2>
-
-      <p class="path"><code>GET /orgstops-e</code></p>
-      <p>Returns the raw stop data JSON used internally.</p>
-      <pre><code>{
-  "stops": [ { "id": "70041", "name": "State" }, { "id": "70042", "name": "Airport" } ]
-}</code></pre> -->
-
-      <!-- <p class="path"><code>GET /maindata</code></p>
-      <p>Returns the main data JSON set used internally.</p>
-      <pre><code>{
-  "lines": [ "Blue Line", "Orange Line" ],
-  "metadata": { "updated": "2025-09-15T12:34:56Z" }
-}</code></pre>
-    </section> -->
-
-    <section>
       <h2 id="live">Live Data</h2>
 
       <p class="path"><code>GET /times/both/:stopId/:nextnum</code></p>
-      <p>Returns the next <code>nextnum</code> inbound and outbound trains for the stop with ID <code>stopId</code>.</p>
+      <p>Returns the next <code>nextnum</code> (1–5) inbound and outbound trains for the stop with place ID <code>stopId</code>.</p>
       <pre><code>{
   "status": "200",
-  "stopId": "70041",
-  "inbound": [ "Train A at 12:40", "Train B at 12:55" ],
-  "outbound": [ "Train C at 12:42", "Train D at 12:58" ]
+  "stopId": "place-sstat",
+  "inbound": [ { "time": "12:40 PM", "endStop": "Alewife" } ],
+  "outbound": [ { "time": "12:42 PM", "endStop": "Braintree" } ]
 }</code></pre>
 
       <p class="path"><code>GET /times/in/:stopId/:nextnum</code></p>
-      <p>Returns the next <code>nextnum</code> inbound trains for the stop with ID <code>stopId</code>.</p>
+      <p>Returns the next <code>nextnum</code> inbound trains for the stop.</p>
       <pre><code>{
   "status": "200",
-  "stopId": "70041",
+  "stopId": "place-sstat",
   "direction": "inbound",
-  "data": [ "Train A at 12:40", "Train B at 12:55" ]
+  "inbound": [ { "time": "12:40 PM", "endStop": "Alewife" } ]
 }</code></pre>
 
       <p class="path"><code>GET /times/out/:stopId/:nextnum</code></p>
-      <p>Returns the next <code>nextnum</code> outbound trains for the stop with ID <code>stopId</code>.</p>
+      <p>Returns the next <code>nextnum</code> outbound trains for the stop.</p>
       <pre><code>{
   "status": "200",
-  "stopId": "70041",
+  "stopId": "place-sstat",
   "direction": "outbound",
-  "data": [ "Train C at 12:42", "Train D at 12:58" ]
+  "outbound": [ { "time": "12:42 PM", "endStop": "Braintree" } ]
+}</code></pre>
+    </section>
+
+    <section>
+      <h2 id="streaming">Streaming (SSE)</h2>
+
+      <p class="path"><code>GET /times/stream</code></p>
+      <p>Streams real-time train predictions as Server-Sent Events (SSE). Pushes a new <code>times</code> event on each interval with fresh inbound and outbound data.</p>
+      <p><strong>Query parameters:</strong></p>
+      <ul>
+        <li><code>stopId</code> (required) — place ID of the stop</li>
+        <li><code>interval</code> (optional, default 30) — polling interval in seconds (5–300)</li>
+        <li><code>nextnum</code> (optional, default 3) — number of upcoming trains to return (1–5)</li>
+      </ul>
+      <pre><code>curl -N "http://localhost:3000/times/stream?stopId=place-sstat&interval=20&nextnum=3"
+
+# Each event looks like:
+event: times
+data: { "at": "2026-06-01T18:00:00Z", "stopId": "place-sstat",
+        "inbound": [...], "outbound": [...] }</code></pre>
+
+      <p class="path"><code>GET /times/reset</code></p>
+      <p>Returns a fresh prediction snapshot on demand. Useful for forcing a data refresh outside the stream interval.</p>
+      <p><strong>Query parameters:</strong></p>
+      <ul>
+        <li><code>stopId</code> (optional) — if provided, returns fresh inbound/outbound data</li>
+        <li><code>nextnum</code> (optional, default 3)</li>
+      </ul>
+      <pre><code>GET /times/reset?stopId=place-sstat&nextnum=3
+
+{
+  "status": "200",
+  "message": "Train timings reset with fresh data.",
+  "stopId": "place-sstat",
+  "inbound": [ { "time": "12:40 PM", "endStop": "Alewife" } ],
+  "outbound": [ { "time": "12:42 PM", "endStop": "Braintree" } ]
 }</code></pre>
     </section>
   </div>

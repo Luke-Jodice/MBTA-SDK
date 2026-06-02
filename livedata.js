@@ -22,10 +22,15 @@ async function getNextThree(stopId, directionId, nextnum) {
   url.searchParams.set("sort", "arrival_time");
   url.searchParams.set("include", "trip,stop,schedule,route");
 
-  const resp = await fetch(url, {
-    headers: { "x-api-key": API_KEY }
-  });
-  
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 5000);
+  let resp;
+  try {
+    resp = await fetch(url, { headers: { "x-api-key": API_KEY }, signal: controller.signal });
+  } finally {
+    clearTimeout(timeoutId);
+  }
+
   if (!resp.ok) {
     throw new Error(`MBTA API error: ${resp.status} ${resp.statusText}`);
   }

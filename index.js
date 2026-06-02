@@ -11,7 +11,6 @@ import { dijkstra } from './scripts/Dijkstras.js';
 import stopdata from './obj/orgstops-e.json' with { type: 'json' };
 import data from './obj/maindata.json' with { type: 'json' };
 const stopManager = new StopManager(stopdata.stops);
-const stopManager2 = new StopManager(data);
 
 // Build graph for Dijkstra's route finding
 function buildGraph(stops) {
@@ -135,20 +134,13 @@ app.get('/train/:name', (c) => {
 //get train info by id
 app.get('/train/id/:id', (c) => {
   const trainId = c.req.param('id');
-  // const stop = stopManager.getById(trainId);
-  const stop = data.filter(obj => obj.line_short === trainId)
+  const stop = data.find(obj => obj.line_short === trainId);
 
   if (!stop) {
-    return c.json({
-      status: "404",
-      message: "Stop not found"
-    }, 404);
+    return c.json({ status: "404", message: "Stop not found" }, 404);
   }
-  
-  return c.json({
-    status: "200",
-    stop: stop
-  });
+
+  return c.json({ status: "200", stop });
 });
 
 
@@ -165,6 +157,10 @@ app.get('/train/closest/:lat/:long', (c) => {
   const lat = parseFloat(c.req.param('lat'));
   const long = parseFloat(c.req.param('long'));
   
+  if (isNaN(lat) || isNaN(long)) {
+    return c.json({ status: "400", error: "Invalid coordinates" }, 400);
+  }
+
   let closestStop = null;
   let minDistance = Infinity;
 
@@ -239,6 +235,18 @@ app.get('/line/:name', (c) => {
   });
 });
 
+app.get('/stops/accessible', (c) => {
+  const stops = stopManager.getWheelchairAccessible();
+  return c.json({ status: "200", count: stops.length, stops });
+});
+
+app.get('/stops/search', (c) => {
+  const q = c.req.query('q') || '';
+  if (!q.trim()) return c.json({ status: "400", error: "q is required" }, 400);
+  const results = stopManager.searchByName(q);
+  return c.json({ status: "200", query: q, count: results.length, results });
+});
+
 app.get('/stop/next/:stop', (c) =>{
   const curstop = c.req.param('stop');
   const stop = data.find(obj => obj.name === curstop);
@@ -247,7 +255,7 @@ app.get('/stop/next/:stop', (c) =>{
     return c.json({ status: "404", message: "Stop not found" }, 404);
   }
 
-  const nextStopData = data.find(obj => obj.name === stop.next_stop);
+  const nextStopData = data.find(obj => obj.name === stop.next_stop?.[0]);
 
   return c.json({
     status: "200",
@@ -337,7 +345,7 @@ app.get('/times/in/:stopId/:nextnum', async (c) =>{
       status: "200",
       stopId: stopid,
       direction: "inbound",
-      data: resp
+      inbound: resp
     });
   } catch (error) {
     console.error('Error in /times/in:', error);
@@ -368,7 +376,7 @@ app.get('/times/out/:stopId/:nextnum', async (c) =>{
       status: "200",
       stopId: stopid,
       direction: "outbound",
-      data: resp
+      outbound: resp
     });
   } catch (error) {
     console.error('Error in /times/out:', error);

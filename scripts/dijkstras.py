@@ -7,7 +7,7 @@ HEADERS = {}  # {"x-api-key": "YOUR_KEY"}
 SUBWAY_ROUTES = ["Red", "Orange", "Blue", "Green-B", "Green-C", "Green-D", "Green-E"]
 
 STOP_COST = 1       # cost per stop travelled
-TRANSFER_COST = 5   # extra penalty for switching lines
+TRANSFER_COST = 3   # extra penalty for switching lines
 
 def build_graph():
     """
